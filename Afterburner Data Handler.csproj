@@ -306,6 +306,7 @@
     <EmbeddedResource Include="Testing\TestForm.resx">
       <DependentUpon>TestForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="LICENSE" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
@@ -322,6 +323,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="README.md" />
     <None Include="Resources\Graphics\bug.png" />
     <None Include="Resources\Graphics\LoggerIcon.png" />
     <None Include="Resources\Graphics\Folder.png" />
