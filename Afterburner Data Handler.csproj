@@ -225,9 +225,15 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Servers\BaseServer.cs" />
+    <Compile Include="Servers\BaseServerSettings.cs" />
     <Compile Include="Servers\Logger\LoggerServer.cs" />
     <Compile Include="Servers\Logger\LoggerSettings.cs" />
-    <Compile Include="Servers\Serial\SerialServer.cs" />
+    <Compile Include="Servers\SerialPort\SendMode.cs" />
+    <Compile Include="Servers\SerialPort\BaudRate.cs" />
+    <Compile Include="Servers\SerialPort\SerialPortEncoding.cs" />
+    <Compile Include="Servers\SerialPort\SerialPortHandler.cs" />
+    <Compile Include="Servers\SerialPort\SerialPortSettings.cs" />
+    <Compile Include="Servers\SerialPort\SerialPortServer.cs" />
     <Compile Include="Servers\ServerStateEventArgs.cs" />
     <Compile Include="Servers\RTSS\FrametimeDataEventArgs.cs" />
     <Compile Include="Servers\Logger\LogWriter.cs" />
@@ -354,6 +360,8 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="NewFolder1\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

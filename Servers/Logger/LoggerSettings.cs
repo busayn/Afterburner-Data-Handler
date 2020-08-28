@@ -8,10 +8,10 @@ using AfterburnerDataHandler.SharedMemory.Afterburner;
 
 namespace AfterburnerDataHandler.Servers.Logger
 {
-    public class LoggerSettings
+    public class LoggerSettings : BaseServerSettings
     {
         [XmlElement]
-        public string FileFormat
+        public override string FileFormat
         {
             get { return fileFormat; }
             set
@@ -23,7 +23,7 @@ namespace AfterburnerDataHandler.Servers.Logger
         }
 
         [XmlElement]
-        public int FormatVersion
+        public override int FormatVersion
         {
             get { return formatVersion; }
             set
@@ -106,15 +106,6 @@ namespace AfterburnerDataHandler.Servers.Logger
             }
         }
 
-        [XmlIgnore]
-        public bool IsDirty
-        {
-            get { return isDirty; }
-            set { isDirty = value; if (value == true) OnParameterChanged(EventArgs.Empty); }
-        }
-
-        public event EventHandler<EventArgs> ParameterChanged;
-
         private string fileFormat = "adhtl";
         private int formatVersion = 1;
         private string logFileFormat = "csv";
@@ -124,16 +115,9 @@ namespace AfterburnerDataHandler.Servers.Logger
         private string finalText = "";
         private MASM_Formatting dataFormatter = new MASM_Formatting();
 
-        private bool isDirty = false;
-
         public LoggerSettings()
         {
             DataFormatter.ParameterChanged += DataFormatterChanged;
-        }
-
-        protected virtual void OnParameterChanged(EventArgs e)
-        {
-            ParameterChanged?.Invoke(this, e);
         }
 
         private void DataFormatterChanged(object sender, EventArgs e)
