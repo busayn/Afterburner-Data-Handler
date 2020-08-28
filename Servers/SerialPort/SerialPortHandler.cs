@@ -26,6 +26,17 @@ namespace AfterburnerDataHandler.Servers.SerialPort
         }
 
         public virtual bool IsOpen { get { return Serial.IsOpen; } }
+        public Encoding Encoding
+        {
+            get { return Serial.Encoding; }
+            set { Serial.Encoding = value; }
+        }
+
+        public string EndOfLineChar
+        {
+            get { return Serial.NewLine; }
+            set { Serial.NewLine = value; }
+        }
 
         public class TextReceivedEventArgs : EventArgs { public string text; }
         public event EventHandler<TextReceivedEventArgs> TextReceived;
@@ -71,12 +82,15 @@ namespace AfterburnerDataHandler.Servers.SerialPort
                     serial.WriteLine(text);
                 }
             }
-            catch { }
+            catch
+            {
+                return false;
+            }
 
             return true;
         }
 
-        public virtual List<string> GetOpenPorts()
+        public virtual List<string> GetAvailablePorts()
         {
             List<string> openPorts = new List<string>(System.IO.Ports.SerialPort.GetPortNames());
 
