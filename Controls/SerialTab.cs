@@ -578,7 +578,7 @@ namespace AfterburnerDataHandler.Controls
                 Margin = new Padding(8, 1, 8, 1),
                 Indent = 1
             };
-            SendModeParametersGroup.Controls.Add(AutoConnectResponseProperty);
+            SendModeParametersGroup.Controls.Add(DataRequestProperty);
 
             this.DataRequestField = new InputField
             {
