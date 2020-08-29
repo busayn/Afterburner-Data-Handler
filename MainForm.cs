@@ -98,13 +98,13 @@ namespace AfterburnerDataHandler
                 Icon = Properties.Resources.SettingsIcon,
             };
 
-            this.Controls.Add(this.StatusBar);
             this.Controls.Add(MainMenu);
+            this.Controls.Add(this.StatusBar);
+            this.MainMenu.Controls.Add(SerialTab);
             this.MainMenu.Controls.Add(MainTab);
             this.MainMenu.Controls.Add(StatisticTab);
             this.MainMenu.Controls.Add(RemoteTab);
             this.MainMenu.Controls.Add(LoggerTab);
-            this.MainMenu.Controls.Add(SerialTab);
             this.MainMenu.Controls.Add(SettingsTab);
         }
 

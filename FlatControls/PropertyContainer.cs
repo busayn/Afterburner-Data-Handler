@@ -82,6 +82,28 @@ namespace AfterburnerDataHandler.FlatControls
         }
 
         [Browsable(true), Category("Appearance")]
+        public int Indent
+        {
+            get { return indent; }
+            set
+            {
+                indent = value;
+                this.UpdateLayout();
+            }
+        }
+
+        [Browsable(true), Category("Appearance")]
+        public int IndentSize
+        {
+            get { return indentSize; }
+            set
+            {
+                indentSize = value;
+                this.UpdateLayout();
+            }
+        }
+
+        [Browsable(true), Category("Appearance")]
         public virtual int LabelWidth
         {
             get { return labelWidth; }
@@ -116,10 +138,12 @@ namespace AfterburnerDataHandler.FlatControls
         {
             get
             {
+                int totalIndent = IndentSize * Indent;
+
                 return new Rectangle(
-                    this.Padding.Left,
+                    this.Padding.Left + totalIndent,
                     0,
-                    LabelWidth,
+                    LabelWidth - totalIndent,
                     this.ClientRectangle.Height);
             }
         }
@@ -127,6 +151,8 @@ namespace AfterburnerDataHandler.FlatControls
         private PropertyContainerLayoutEngine layoutEngine;
         private ContentAlignment labelAlignment = ContentAlignment.MiddleLeft;
         private bool multiline = true;
+        private int indent = 0;
+        private int indentSize = 16;
         private int labelWidth;
         private TextFormatFlags textFormat = TextFormatFlags.TextBoxControl;
 

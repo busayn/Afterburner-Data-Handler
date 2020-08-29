@@ -73,7 +73,7 @@ namespace AfterburnerDataHandler.Servers.SerialPort
 
         public override bool Begin()
         {
-            if (ServerState != ServerState.Stop) Stop();
+            Stop();
 
             ServerState = ServerState.Begin;
             MASMData.Start();
@@ -95,12 +95,15 @@ namespace AfterburnerDataHandler.Servers.SerialPort
 
         public override void Stop()
         {
-            serialPortTimer?.Dispose();
-            serialPortTimer = null;
-            Serial.Close();
-            MASMData.Stop();
+            if (ServerState != ServerState.Stop)
+            {
+                serialPortTimer?.Dispose();
+                serialPortTimer = null;
+                Serial.Close();
+                MASMData.Stop();
 
-            base.Stop();
+                base.Stop();
+            }
         }
 
         protected virtual void SerialPortLoop(object state)

@@ -135,7 +135,7 @@ namespace AfterburnerDataHandler.Servers.Logger
 
         public override bool Begin()
         {
-            if (ServerState != ServerState.Stop) Stop();
+            Stop();
 
             ServerState = ServerState.Begin;
 
@@ -159,15 +159,18 @@ namespace AfterburnerDataHandler.Servers.Logger
 
         public override void Stop()
         {
-            StopLog();
+            if (ServerState != ServerState.Stop)
+            {
+                StopLog();
 
-            if (FrametimeServer.ServerState != ServerState.Stop)
-                FrametimeServer?.Stop();
+                if (FrametimeServer.ServerState != ServerState.Stop)
+                    FrametimeServer?.Stop();
 
-            masmTimer?.Dispose();
-            masmTimer = null;
+                masmTimer?.Dispose();
+                masmTimer = null;
 
-            base.Stop();
+                base.Stop();
+            }
         }
 
         public virtual bool BeginLog()
