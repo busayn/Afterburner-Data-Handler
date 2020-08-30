@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -137,9 +138,25 @@ namespace AfterburnerDataHandler.FlatControls
 
         protected virtual DropdownMenuItem AddItemControl(object item, int index)
         {
+            string itemName = item.ToString();
+
+            if (item != null)
+            {
+                MemberInfo[] memberInfo = item.GetType().GetMember(item.ToString());
+
+                if (memberInfo != null && memberInfo.Length > 0)
+                {
+                    DescriptionAttribute[] descriptions = memberInfo[0].GetCustomAttributes(
+                        typeof(DescriptionAttribute), false) as DescriptionAttribute[];
+
+                    if (descriptions != null && descriptions.Length > 0)
+                        itemName = descriptions[0].Description;
+                }
+            }
+
             DropdownMenuItem itemControl = new DropdownMenuItem()
             {
-                Text = item.ToString(),
+                Text = itemName,
                 Tag = item,
                 Height = ItemHeight
             };

@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -128,7 +129,23 @@ namespace AfterburnerDataHandler.FlatControls
         
         protected virtual void MenuValueChanged(object sender, ItemEventArgs e)
         {
-            this.Text = e.data.ToString();
+            string itemName = e.data.ToString();
+
+            if (e.data != null)
+            {
+                MemberInfo[] memberInfo = e.data.GetType().GetMember(e.data.ToString());
+
+                if (memberInfo != null && memberInfo.Length > 0)
+                {
+                    DescriptionAttribute[] descriptions = memberInfo[0].GetCustomAttributes(
+                        typeof(DescriptionAttribute), false) as DescriptionAttribute[];
+
+                    if (descriptions != null && descriptions.Length > 0)
+                        itemName = descriptions[0].Description;
+                }
+            }
+
+            this.Text = itemName;
             OnSelectedValueChanged(e);
         }
 
