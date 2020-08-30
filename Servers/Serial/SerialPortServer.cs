@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AfterburnerDataHandler.Servers.SerialPort
+namespace AfterburnerDataHandler.Servers.Serial
 {
     public class SerialPortServer : BaseServer
     {

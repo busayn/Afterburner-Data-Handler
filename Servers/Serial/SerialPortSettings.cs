@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using AfterburnerDataHandler.SharedMemory.Afterburner;
 
-namespace AfterburnerDataHandler.Servers.SerialPort
+namespace AfterburnerDataHandler.Servers.Serial
 {
     public class SerialPortSettings : BaseServerSettings
     {

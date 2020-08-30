@@ -1,4 +1,4 @@
-﻿namespace AfterburnerDataHandler.Servers.SerialPort
+﻿namespace AfterburnerDataHandler.Servers.Serial
 {
     public enum SendMode
     {

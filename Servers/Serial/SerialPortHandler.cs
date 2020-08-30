@@ -5,48 +5,48 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AfterburnerDataHandler.Servers.SerialPort
+namespace AfterburnerDataHandler.Servers.Serial
 {
     public class SerialPortHandler
     {
 
-        public virtual System.IO.Ports.SerialPort Serial
+        public virtual SerialPort BaseSerial
         {
             get
             {
                 if (serial == null)
-                    serial = new System.IO.Ports.SerialPort()
+                    serial = new SerialPort()
                     {
-                        ReadTimeout = System.IO.Ports.SerialPort.InfiniteTimeout,
-                        WriteTimeout = System.IO.Ports.SerialPort.InfiniteTimeout,
+                        ReadTimeout = SerialPort.InfiniteTimeout,
+                        WriteTimeout = SerialPort.InfiniteTimeout,
                     };
 
                 return serial;
             }
         }
 
-        public virtual bool IsOpen { get { return Serial.IsOpen; } }
+        public virtual bool IsOpen { get { return BaseSerial.IsOpen; } }
         public Encoding Encoding
         {
-            get { return Serial.Encoding; }
-            set { Serial.Encoding = value; }
+            get { return BaseSerial.Encoding; }
+            set { BaseSerial.Encoding = value; }
         }
 
         public string EndOfLineChar
         {
-            get { return Serial.NewLine; }
-            set { Serial.NewLine = value; }
+            get { return BaseSerial.NewLine; }
+            set { BaseSerial.NewLine = value; }
         }
 
         public class TextReceivedEventArgs : EventArgs { public string text; }
         public event EventHandler<TextReceivedEventArgs> TextReceived;
 
-        private System.IO.Ports.SerialPort serial;
+        private SerialPort serial;
         private string receivedData = "";
 
         public SerialPortHandler()
         {
-            Serial.DataReceived += SerialDataReceived;
+            BaseSerial.DataReceived += SerialDataReceived;
         }
 
         public virtual bool Open(string portName, int speed)
@@ -58,9 +58,9 @@ namespace AfterburnerDataHandler.Servers.SerialPort
 
             try
             {
-                Serial.PortName = portName;
-                Serial.BaudRate = speed;
-                Serial.Open();
+                BaseSerial.PortName = portName;
+                BaseSerial.BaudRate = speed;
+                BaseSerial.Open();
             }
             catch { }
 
@@ -69,7 +69,7 @@ namespace AfterburnerDataHandler.Servers.SerialPort
 
         public virtual void Close()
         {
-            Serial?.Close();
+            BaseSerial?.Close();
         }
 
         public virtual bool SendText(string text)
@@ -80,7 +80,7 @@ namespace AfterburnerDataHandler.Servers.SerialPort
             {
                 if (string.IsNullOrEmpty(text) == false)
                 {
-                    Serial?.Write(text + (EndOfLineChar ?? "\n"));
+                    BaseSerial?.Write(text + (EndOfLineChar ?? "\n"));
                 }
             }
             catch
@@ -93,7 +93,7 @@ namespace AfterburnerDataHandler.Servers.SerialPort
 
         public virtual List<string> GetAvailablePorts()
         {
-            List<string> openPorts = new List<string>(System.IO.Ports.SerialPort.GetPortNames());
+            List<string> openPorts = new List<string>(SerialPort.GetPortNames());
 
             return openPorts;
         }
@@ -102,10 +102,10 @@ namespace AfterburnerDataHandler.Servers.SerialPort
         {
             try
             {
-                if (e.EventType == SerialData.Chars && sender is System.IO.Ports.SerialPort)
+                if (e.EventType == SerialData.Chars && sender is SerialPort)
                 {
-                    System.IO.Ports.SerialPort serialPort = sender as System.IO.Ports.SerialPort;
-                    receivedData = (receivedData ?? "") + (serialPort.ReadExisting() ?? "");
+                    SerialPort serialPort = sender as SerialPort;
+                    receivedData = (receivedData ?? String.Empty) + (serialPort.ReadExisting() ?? String.Empty);
 
                     if (receivedData.Contains(serialPort.NewLine))
                     {
@@ -113,7 +113,7 @@ namespace AfterburnerDataHandler.Servers.SerialPort
 
                         if (newLines.Length < 2)
                         {
-                            receivedData = "";
+                            receivedData = String.Empty;
 
                             if (newLines.Length > 0 && string.IsNullOrEmpty(newLines[0]) == false)
                                 OnTextReceived(new TextReceivedEventArgs { text = newLines[0] });

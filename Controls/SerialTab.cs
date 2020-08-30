@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using AfterburnerDataHandler.FlatControls;
-using AfterburnerDataHandler.Servers.SerialPort;
+using AfterburnerDataHandler.Servers.Serial;
 
 namespace AfterburnerDataHandler.Controls
 {

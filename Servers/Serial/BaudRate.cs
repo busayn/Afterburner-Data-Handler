@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace AfterburnerDataHandler.Servers.SerialPort
+namespace AfterburnerDataHandler.Servers.Serial
 {
     public enum BaudRate : int
     {
