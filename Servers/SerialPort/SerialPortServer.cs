@@ -76,13 +76,16 @@ namespace AfterburnerDataHandler.Servers.SerialPort
             Stop();
 
             ServerState = ServerState.Begin;
+
             MASMData.Start();
-            Serial.EndOfLineChar = Settings.EndOfLineChar;
+            Serial.EndOfLineChar = Regex.Unescape(Settings.EndOfLineChar);
             Serial.Encoding = Settings.Encoding.ToTextEncoding();
 
             int connectionInterval = settings.AutoConnect == true
                 ? settings.AutoConnectResponseTimeout
                 : settings.ConnectionInterval;
+
+            ServerState = ServerState.Waiting;
 
             serialPortTimer = new Timer(
                 SerialPortLoop,
@@ -138,14 +141,32 @@ namespace AfterburnerDataHandler.Servers.SerialPort
                 }
             }
 
-            if (this.ServerState == ServerState.Connected && Settings.SendMode == SendMode.Stream)
+            if (this.ServerState == ServerState.Connected)
             {
-                SendData();
+                if (Serial.IsOpen == false)
+                {
+                    Reconnect();
+                }
+
+                if (Settings.SendMode == SendMode.Stream)
+                {
+                    SendData();
+                }
             }
         }
 
-        private void TextReceived(object sender, SerialPortHandler.TextReceivedEventArgs e)
+        protected virtual void TextReceived(object sender, SerialPortHandler.TextReceivedEventArgs e)
         {
+            if (this.ServerState == ServerState.Connected && Settings.SendMode == SendMode.Request)
+            {
+                string targetRequest = Regex.Unescape(Settings.DataRequest ?? "");
+
+                if (string.IsNullOrEmpty(e.text) == false && e.text.CompareTo(targetRequest) == 0)
+                {
+                    SendData();
+                }
+            }
+
             if (Settings.AutoConnect == true && this.ServerState == ServerState.Waiting)
             {
                 string targetResponse = Regex.Unescape(Settings.AutoConnectResponse ?? "");
@@ -168,36 +189,29 @@ namespace AfterburnerDataHandler.Servers.SerialPort
                     }
                 }
             }
-
-            if (this.ServerState == ServerState.Connected && Settings.SendMode == SendMode.Request)
-            {
-                string targetRequest = Regex.Unescape(Settings.DataRequest ?? "");
-
-                if (string.IsNullOrEmpty(e.text) == false && e.text.CompareTo(targetRequest) == 0)
-                {
-                    SendData();
-                }
-            }
         }
 
-        protected bool SendData()
+        protected virtual bool SendData()
         {
             bool sendingResult = Serial.SendText(
                 Settings.DataFormatter.Format(MASMData.Update()));
 
-            if (sendingResult == false)
-            {
-                this.ServerState = ServerState.Reconnect;
-                this.ServerState = ServerState.Waiting;
-
-                int connectionInterval = settings.AutoConnect == true
-                    ? settings.AutoConnectResponseTimeout
-                    : settings.ConnectionInterval;
-
-                serialPortTimer?.Change(connectionInterval, connectionInterval);
-            }
+            if (sendingResult == false || Serial.IsOpen == false)
+                Reconnect();
 
             return sendingResult;
+        }
+
+        protected virtual void Reconnect()
+        {
+            this.ServerState = ServerState.Reconnect;
+            this.ServerState = ServerState.Waiting;
+
+            int connectionInterval = settings.AutoConnect == true
+                ? settings.AutoConnectResponseTimeout
+                : settings.ConnectionInterval;
+
+            serialPortTimer?.Change(connectionInterval, connectionInterval);
         }
     }
 }

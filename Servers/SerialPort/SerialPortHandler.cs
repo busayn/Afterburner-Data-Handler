@@ -42,6 +42,7 @@ namespace AfterburnerDataHandler.Servers.SerialPort
         public event EventHandler<TextReceivedEventArgs> TextReceived;
 
         private System.IO.Ports.SerialPort serial;
+        private string receivedData = "";
 
         public SerialPortHandler()
         {
@@ -73,13 +74,13 @@ namespace AfterburnerDataHandler.Servers.SerialPort
 
         public virtual bool SendText(string text)
         {
-            if (IsOpen) return false;
+            if (IsOpen == false) return false;
 
             try
             {
                 if (string.IsNullOrEmpty(text) == false)
                 {
-                    serial.WriteLine(text);
+                    Serial?.Write(text + (EndOfLineChar ?? "\n"));
                 }
             }
             catch
@@ -104,11 +105,31 @@ namespace AfterburnerDataHandler.Servers.SerialPort
                 if (e.EventType == SerialData.Chars && sender is System.IO.Ports.SerialPort)
                 {
                     System.IO.Ports.SerialPort serialPort = sender as System.IO.Ports.SerialPort;
-                    string line = serialPort.ReadLine();
+                    receivedData = (receivedData ?? "") + (serialPort.ReadExisting() ?? "");
 
-                    if (string.IsNullOrEmpty(line) == false && line.IndexOf(serialPort.NewLine) != 0)
+                    if (receivedData.Contains(serialPort.NewLine))
                     {
-                        OnTextReceived(new TextReceivedEventArgs { text = line.Trim(serialPort.NewLine.ToArray()) });
+                        string[] newLines = receivedData.Split(new string[] { serialPort.NewLine }, StringSplitOptions.None);
+
+                        if (newLines.Length < 2)
+                        {
+                            receivedData = "";
+
+                            if (newLines.Length > 0 && string.IsNullOrEmpty(newLines[0]) == false)
+                                OnTextReceived(new TextReceivedEventArgs { text = newLines[0] });
+                        }
+                        else
+                        {
+                            receivedData = newLines[newLines.Length - 1];
+
+                            for (int i = 0; i < newLines.Length - 1; i++)
+                            {
+                                if (string.IsNullOrEmpty(newLines[i]) == false)
+                                {
+                                    OnTextReceived(new TextReceivedEventArgs { text = newLines[i] });
+                                }
+                            }
+                        }
                     }
                 }
             }
