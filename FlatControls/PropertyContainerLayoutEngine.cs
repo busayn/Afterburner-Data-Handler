@@ -9,7 +9,8 @@ namespace AfterburnerDataHandler.FlatControls
 {
     public class PropertyContainerLayoutEngine : LayoutEngine
     {
-        public virtual int LabelWidth { get; set; } = 100;
+        public virtual int LabelWidth { get; set; } = 40;
+        public virtual bool AbsoluteLabelWidth { get; set; } = false;
         public virtual bool FitContent { get; set; } = true;
         public virtual HorizontalAlignment ControlsAlignment { get; set; } = HorizontalAlignment.Left;
 
@@ -23,11 +24,12 @@ namespace AfterburnerDataHandler.FlatControls
             Padding panelPadding = panel.Padding;
             Point nextControlLocation = panel.ClientRectangle.Location;
 
-            int remainingWidth = panelSize.Width - panel.Padding.Horizontal - LabelWidth;
+            int labelSize = AbsoluteLabelWidth == true ? (int)(panelSize.Width / 100f * LabelWidth) : LabelWidth;
+            int remainingWidth = panelSize.Width - panel.Padding.Horizontal - labelSize;
             int remainingItems = 0;
             int targetHeight = 0;
 
-            nextControlLocation.X += LabelWidth + panel.Padding.Left;
+            nextControlLocation.X += labelSize + panel.Padding.Left;
             nextControlLocation.Y += panelPadding.Top;
 
             foreach (Control c in panel.Controls)

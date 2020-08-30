@@ -40,6 +40,26 @@ namespace AfterburnerDataHandler.FlatControls
         }
 
         [Browsable(true), Category("Appearance")]
+        public bool AbsoluteLabelWidth
+        {
+            get
+            {
+                if (LayoutEngine is PropertyContainerLayoutEngine)
+                    return (LayoutEngine as PropertyContainerLayoutEngine).AbsoluteLabelWidth;
+                else
+                    return false;
+            }
+            set
+            {
+                if (LayoutEngine is PropertyContainerLayoutEngine)
+                    (LayoutEngine as PropertyContainerLayoutEngine).AbsoluteLabelWidth = value;
+
+                this.UpdateLayout();
+                this.PerformLayout();
+            }
+        }
+
+        [Browsable(true), Category("Appearance")]
         public HorizontalAlignment ControlsAlignment
         {
             get
