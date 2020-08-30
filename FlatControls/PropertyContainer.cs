@@ -139,7 +139,7 @@ namespace AfterburnerDataHandler.FlatControls
             }
         }
 
-        protected virtual int DefaultLabelWidth { get { return 110; } }
+        protected virtual int DefaultLabelWidth { get { return 50; } }
         protected override Size DefaultMinimumSize { get { return new Size(10, 10); } }
         protected override Size DefaultSize { get { return new Size(200, 32); } }
 
@@ -159,11 +159,14 @@ namespace AfterburnerDataHandler.FlatControls
             get
             {
                 int totalIndent = IndentSize * Indent;
+                int labelSize = AbsoluteLabelWidth == true
+                    ? LabelWidth
+                    : (int)(this.ClientRectangle.Width / 100f * LabelWidth);
 
                 return new Rectangle(
                     this.Padding.Left + totalIndent,
                     0,
-                    LabelWidth - totalIndent,
+                    labelSize - totalIndent,
                     this.ClientRectangle.Height);
             }
         }

@@ -91,7 +91,6 @@ namespace AfterburnerDataHandler.Controls
             this.Header = new PropertyContainer
             {
                 Height = 40,
-                LabelWidth = 200,
                 AutoScroll = false,
                 FitContent = false,
                 ControlsAlignment = HorizontalAlignment.Right,

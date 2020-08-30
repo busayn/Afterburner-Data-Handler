@@ -273,7 +273,6 @@ namespace AfterburnerDataHandler.Controls
             {
                 Text = "Serial Port",
                 Height = 40,
-                LabelWidth = 200,
                 AutoScroll = false,
                 MinimumSize = new Size(380, 20),
                 MaximumSize = new Size(1200, int.MaxValue),
@@ -311,7 +310,6 @@ namespace AfterburnerDataHandler.Controls
             {
                 Text = "NewProject",
                 Height = 40,
-                LabelWidth = 400,
                 AutoScroll = false,
                 MinimumSize = new Size(380, 20),
                 MaximumSize = new Size(1200, int.MaxValue),
@@ -385,7 +383,6 @@ namespace AfterburnerDataHandler.Controls
             this.EditDataProperty = new PropertyContainer
             {
                 Text = "Serial Port Data",
-                LabelWidth = 120,
                 Margin = new Padding(8, 1, 8, 1)
             };
             MainParametersGroup.Controls.Add(EditDataProperty);
@@ -400,7 +397,6 @@ namespace AfterburnerDataHandler.Controls
             this.PortSpeedProperty = new PropertyContainer
             {
                 Text = "Port Speed",
-                LabelWidth = 120,
                 Margin = new Padding(8, 1, 8, 1)
             };
             MainParametersGroup.Controls.Add(PortSpeedProperty);
@@ -428,7 +424,6 @@ namespace AfterburnerDataHandler.Controls
             this.AutoConnectProperty = new PropertyContainer
             {
                 Text = "Auto Connect",
-                LabelWidth = 120,
                 Margin = new Padding(8, 1, 8, 1)
             };
             ConnectionParametersGroup.Controls.Add(AutoConnectProperty);
@@ -444,7 +439,6 @@ namespace AfterburnerDataHandler.Controls
             this.AutoConnectRequestProperty = new PropertyContainer
             {
                 Text = "Connection Request",
-                LabelWidth = 120,
                 Margin = new Padding(8, 1, 8, 1),
                 Indent = 1
             };
@@ -460,7 +454,6 @@ namespace AfterburnerDataHandler.Controls
             this.AutoConnectResponseProperty = new PropertyContainer
             {
                 Text = "Connection Response",
-                LabelWidth = 120,
                 Margin = new Padding(8, 1, 8, 1),
                 Indent = 1
             };
@@ -476,7 +469,6 @@ namespace AfterburnerDataHandler.Controls
             this.AutoConnectResponseTimeoutProperty = new PropertyContainer
             {
                 Text = "Response Timeout (ms)",
-                LabelWidth = 120,
                 Margin = new Padding(8, 1, 8, 1),
                 Indent = 1
             };
@@ -494,7 +486,6 @@ namespace AfterburnerDataHandler.Controls
             this.ConnectionIntervalProperty = new PropertyContainer
             {
                 Text = "Connection Interval (ms)",
-                LabelWidth = 120,
                 Margin = new Padding(8, 1, 8, 1),
             };
             ConnectionParametersGroup.Controls.Add(ConnectionIntervalProperty);
@@ -522,7 +513,6 @@ namespace AfterburnerDataHandler.Controls
             this.SendModeProperty = new PropertyContainer
             {
                 Text = "Send Mode",
-                LabelWidth = 120,
                 Margin = new Padding(8, 1, 8, 1)
             };
             SendModeParametersGroup.Controls.Add(SendModeProperty);
@@ -538,7 +528,6 @@ namespace AfterburnerDataHandler.Controls
             this.MessageIntervalProperty = new PropertyContainer
             {
                 Text = "Message Interval (ms)",
-                LabelWidth = 120,
                 Margin = new Padding(8, 1, 8, 1),
                 Indent = 1
             };
@@ -556,7 +545,6 @@ namespace AfterburnerDataHandler.Controls
             this.ConnectionCheckProperty = new PropertyContainer
             {
                 Text = "Connection Check (ms)",
-                LabelWidth = 120,
                 Margin = new Padding(8, 1, 8, 1),
                 Indent = 1
             };
@@ -574,7 +562,6 @@ namespace AfterburnerDataHandler.Controls
             this.DataRequestProperty = new PropertyContainer
             {
                 Text = "Data Request",
-                LabelWidth = 120,
                 Margin = new Padding(8, 1, 8, 1),
                 Indent = 1
             };

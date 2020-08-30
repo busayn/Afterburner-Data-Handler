@@ -24,7 +24,7 @@ namespace AfterburnerDataHandler.FlatControls
             Padding panelPadding = panel.Padding;
             Point nextControlLocation = panel.ClientRectangle.Location;
 
-            int labelSize = AbsoluteLabelWidth == true ? (int)(panelSize.Width / 100f * LabelWidth) : LabelWidth;
+            int labelSize = AbsoluteLabelWidth == true ? LabelWidth : (int)(panelSize.Width / 100f * LabelWidth);
             int remainingWidth = panelSize.Width - panel.Padding.Horizontal - labelSize;
             int remainingItems = 0;
             int targetHeight = 0;

@@ -231,7 +231,6 @@ namespace AfterburnerDataHandler.Controls
             {
                 Text = "Logger",
                 Height = 40,
-                LabelWidth = 200,
                 AutoScroll = false,
                 MinimumSize = new Size(380, 20),
                 MaximumSize = new Size(1200, int.MaxValue),
@@ -280,7 +279,6 @@ namespace AfterburnerDataHandler.Controls
             {
                 Text = "NewProject",
                 Height = 40,
-                LabelWidth = 400,
                 AutoScroll = false,
                 MinimumSize = new Size(380, 20),
                 MaximumSize = new Size(1200, int.MaxValue),
@@ -342,7 +340,6 @@ namespace AfterburnerDataHandler.Controls
             this.LogNameProperty = new PropertyContainer
             {
                 Text = "Log Name",
-                LabelWidth = 120,
                 Margin = new Padding(8, 1, 8, 1)
             };
             ParametersContainer.Controls.Add(LogNameProperty);
@@ -357,7 +354,6 @@ namespace AfterburnerDataHandler.Controls
             this.EditDataProperty = new PropertyContainer
             {
                 Text = "Log Data",
-                LabelWidth = 120,
                 Margin = new Padding(8, 1, 8, 1)
             };
             ParametersContainer.Controls.Add(EditDataProperty);
@@ -372,7 +368,6 @@ namespace AfterburnerDataHandler.Controls
             this.UpdateIntervalProperty = new PropertyContainer
             {
                 Text = "Update Interval (ms)",
-                LabelWidth = 120,
                 Margin = new Padding(8, 1, 8, 1)
             };
             ParametersContainer.Controls.Add(UpdateIntervalProperty);
@@ -389,7 +384,6 @@ namespace AfterburnerDataHandler.Controls
             this.FrametimeModeProperty = new PropertyContainer
             {
                 Text = "Frametime Mode",
-                LabelWidth = 120,
                 Margin = new Padding(8, 1, 8, 1)
             };
             ParametersContainer.Controls.Add(FrametimeModeProperty);
