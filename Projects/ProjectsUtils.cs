@@ -24,7 +24,7 @@ namespace AfterburnerDataHandler.Projects
                 {
                     target = newProject;
                     target.ProjectName = Path.GetFileNameWithoutExtension(path);
-                    target.IsDirty = false;
+                    target.SetDirty(false, true);
                 }
                 else { return false; }
             }
@@ -38,11 +38,9 @@ namespace AfterburnerDataHandler.Projects
             try
             {
                 string data = SerializeProject(project);
-
                 File.WriteAllText(path, data, Encoding.UTF8);
-
                 project.ProjectName = Path.GetFileNameWithoutExtension(path);
-                project.IsDirty = false;
+                project.SetDirty(false, true);
             }
             catch { return false; }
 

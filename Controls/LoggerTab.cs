@@ -72,6 +72,24 @@ namespace AfterburnerDataHandler.Controls
         {
             Server.StateChanged += ServerStateChanged;
             Server.LogStateChanged += LogStateChanged;
+
+            EventHandler<EventArgs> updateValues = (object sender, EventArgs e) =>
+            {
+                UpdateValues();
+            };
+
+            Server.Settings.ParameterChanged += updateValues;
+            Server.Settings.ProjectNameChanged += updateValues;
+
+            Server.SettingsChanged += (object sender, EventArgs e) =>
+            {
+                Server.Settings.ParameterChanged -= updateValues;
+                Server.Settings.ProjectNameChanged -= updateValues;
+                Server.Settings.ParameterChanged += updateValues;
+                Server.Settings.ProjectNameChanged += updateValues;
+
+                UpdateValues();
+            };
         }
 
         private void ServerStateChanged(object sender, Servers.ServerStateEventArgs e)
@@ -250,6 +268,10 @@ namespace AfterburnerDataHandler.Controls
 
         public virtual void UpdateValues()
         {
+            ParametersHeader.Text = Server.Settings.IsDirty
+                ? "*" + Server.Settings.ProjectName
+                : Server.Settings.ProjectName;
+
             LogNameField.Text = Server.LogName;
             UpdateIntervalField.Value = Server.Settings.DataUpdateInterval;
             FrametimeModeToggle.Checked = Server.Settings.UseFrametimeMode;

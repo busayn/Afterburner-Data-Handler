@@ -40,22 +40,27 @@ namespace AfterburnerDataHandler.Projects
             set
             {
                 isDirty = value;
-
-                if (value == true)
-                    OnParameterChanged(EventArgs.Empty);
+                SetDirty(value, value == true);
             }
         }
 
         private bool isDirty = false;
         private string projectName = "NewProject";
 
+        public virtual void SetDirty(bool isDirty, bool invokeParameterChanged)
+        {
+            this.isDirty = isDirty;
+
+            if (invokeParameterChanged == true)
+                OnParameterChanged(EventArgs.Empty);
+        }
+
         protected virtual void SetParameter<T>(ref T parameter, T value)
         {
             bool parameterChanged = !parameter.Equals(value);
             parameter = value;
+            if (parameterChanged == true) IsDirty = true;
 
-            if (parameterChanged == true)
-                OnParameterChanged(EventArgs.Empty);
         }
 
         protected virtual void OnParameterChanged(EventArgs e)

@@ -317,6 +317,7 @@
     <EmbeddedResource Include="Testing\TestForm.resx">
       <DependentUpon>TestForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="LICENSE" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
@@ -329,9 +330,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

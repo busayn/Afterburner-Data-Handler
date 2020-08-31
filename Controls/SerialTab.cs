@@ -110,6 +110,24 @@ namespace AfterburnerDataHandler.Controls
         protected virtual void InitializeServer()
         {
             Server.StateChanged += ServerStateChanged;
+
+            EventHandler<EventArgs> updateValues = (object sender, EventArgs e) =>
+            {
+                UpdateValues();
+            };
+
+            Server.Settings.ParameterChanged += updateValues;
+            Server.Settings.ProjectNameChanged += updateValues;
+
+            Server.SettingsChanged += (object sender, EventArgs e) =>
+            {
+                Server.Settings.ParameterChanged -= updateValues;
+                Server.Settings.ProjectNameChanged -= updateValues;
+                Server.Settings.ParameterChanged += updateValues;
+                Server.Settings.ProjectNameChanged += updateValues;
+
+                UpdateValues();
+            };
         }
 
         private void ServerStateChanged(object sender, Servers.ServerStateEventArgs e)
@@ -252,6 +270,16 @@ namespace AfterburnerDataHandler.Controls
                 UpdateValues();
             };
 
+            EventHandler connectionCheckHandler = (object sender, EventArgs e) =>
+            {
+                Server.Settings.ConnectionCheckInterval = (int)ConnectionCheckField.Value;
+                UpdateValues();
+            };
+
+            ConnectionCheckField.Leave += connectionCheckHandler;
+            ConnectionCheckField.AddButton.Click += connectionCheckHandler;
+            ConnectionCheckField.SubtractButton.Click += connectionCheckHandler;
+
             EventHandler messageIntervalHandler = (object sender, EventArgs e) =>
             {
                 Server.Settings.MessageInterval = (int)MessageIntervalField.Value;
@@ -262,17 +290,6 @@ namespace AfterburnerDataHandler.Controls
             MessageIntervalField.AddButton.Click += messageIntervalHandler;
             MessageIntervalField.SubtractButton.Click += messageIntervalHandler;
 
-            Server.Settings.ParameterChanged += (object sender, EventArgs e) =>
-            {
-                string editLabel = "*";
-
-                if (string.IsNullOrEmpty(this.ParametersHeader.Text) == false &&
-                    this.ParametersHeader.Text.StartsWith(editLabel) == false)
-                {
-                    this.ParametersHeader.Text = this.ParametersHeader.Text.Insert(0, editLabel);
-                }
-            };
-
             DataRequestField.Leave += (object sender, EventArgs e) =>
             {
                 Server.Settings.DataRequest = DataRequestField.Text;
@@ -282,6 +299,10 @@ namespace AfterburnerDataHandler.Controls
 
         public virtual void UpdateValues()
         {
+            ParametersHeader.Text = Server.Settings.IsDirty
+                ? "*" + Server.Settings.ProjectName
+                : Server.Settings.ProjectName;
+
             PortSpeedField.SelectedItem = Server.Settings.PortSpeed;
             AutoConnectToggle.Checked = Server.Settings.AutoConnect;
             AutoConnectRequestField.Text = Server.Settings.AutoConnectRequest;
@@ -292,6 +313,15 @@ namespace AfterburnerDataHandler.Controls
             MessageIntervalField.Value = Server.Settings.MessageInterval;
             ConnectionCheckField.Value = Server.Settings.ConnectionCheckInterval;
             DataRequestField.Text = Server.Settings.DataRequest;
+
+            AutoConnectRequestField.Enabled = Server.Settings.AutoConnect;
+            AutoConnectResponseField.Enabled = Server.Settings.AutoConnect;
+            AutoConnectResponseTimeoutField.Enabled = Server.Settings.AutoConnect;
+            ConnectionIntervalField.Enabled = !Server.Settings.AutoConnect;
+
+            MessageIntervalField.Enabled = Server.Settings.SendMode == SendMode.Stream;
+            ConnectionCheckField.Enabled = Server.Settings.SendMode == SendMode.Request;
+            DataRequestField.Enabled = Server.Settings.SendMode == SendMode.Request;
         }
 
         protected virtual void InitializeGUI()
@@ -346,7 +376,7 @@ namespace AfterburnerDataHandler.Controls
 
             this.ParametersHeader = new PropertyContainer
             {
-                Text = "NewProject",
+                Text = "",
                 Height = 40,
                 AutoScroll = false,
                 MinimumSize = new Size(380, 20),
