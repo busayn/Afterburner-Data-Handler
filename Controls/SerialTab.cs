@@ -9,6 +9,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using AfterburnerDataHandler.FlatControls;
+using AfterburnerDataHandler.Projects;
+using AfterburnerDataHandler.Servers;
 using AfterburnerDataHandler.Servers.Serial;
 
 namespace AfterburnerDataHandler.Controls
@@ -157,6 +159,42 @@ namespace AfterburnerDataHandler.Controls
                     Server?.Begin();
                 else
                     Server?.Stop();
+            };
+
+            SaveServerSettingsButton.Click += (object sender, EventArgs e) =>
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.FileName = this.Server.Settings.ProjectName;
+                saveFileDialog.Filter = "ADH Text Serial Port project (*.ADHTS)|*.adhts|All files (*.*)|*.*";
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    ProjectsUtils.SaveProject(saveFileDialog.FileName, this.Server.Settings);
+                }
+
+                saveFileDialog?.Dispose();
+            };
+
+            LoadServerSettingsButton.Click += (object sender, EventArgs e) =>
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "ADH Text Serial Port project (*.ADHTS)|*.adhts|All files (*.*)|*.*";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    SerialPortProject currentProject = Server.Settings;
+
+                    if (ProjectsUtils.LoadProject(openFileDialog.FileName, ref currentProject))
+                    {
+                        Server.Settings = currentProject;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid project file.", "Error", MessageBoxButtons.OK);
+                    }
+                }
+
+                openFileDialog?.Dispose();
             };
 
             EditDataButton.Click += (object sender, EventArgs e) =>

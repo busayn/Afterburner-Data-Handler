@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AfterburnerDataHandler.SharedMemory.Afterburner;
 using AfterburnerDataHandler.Servers.RTSS;
-using System.IO;
+using AfterburnerDataHandler.Projects;
 
 namespace AfterburnerDataHandler.Servers.Logger
 {
@@ -74,12 +75,15 @@ namespace AfterburnerDataHandler.Servers.Logger
             }
         }
 
-        public LoggerSettings Settings
+        public LoggerProject Settings
         {
             get
             {
                 if (settings == null)
-                    settings = new LoggerSettings();
+                {
+                    settings = new LoggerProject();
+                    OnSettingsChanged(EventArgs.Empty);
+                }
 
                 return settings;
             }
@@ -87,10 +91,12 @@ namespace AfterburnerDataHandler.Servers.Logger
             {
                 this.Stop();
                 settings = value;
+                OnSettingsChanged(EventArgs.Empty);
             }
         }
 
         public event EventHandler<ServerStateEventArgs> LogStateChanged;
+        public event EventHandler<EventArgs> SettingsChanged;
 
         public ServerState LogState
         {
@@ -111,7 +117,7 @@ namespace AfterburnerDataHandler.Servers.Logger
         private MASM frametimeData;
         private RTSS_FrametimeServer frametimeServer;
         private LogWriter logServer;
-        private LoggerSettings settings;
+        private LoggerProject settings;
         private ServerState logState = ServerState.Stop;
 
         private long currentFrame;
@@ -121,16 +127,6 @@ namespace AfterburnerDataHandler.Servers.Logger
         {
             FrametimeServer.StateChanged += FrametimeServerStateChanged;
             FrametimeServer.FrametimeDataReceived += FrametimeServerDataReceived;
-
-            Settings.DataFormatter.FormattingItems.Add(new MASM_FormattingItem(MASM_FormattingItem.ItemMode.Property)
-            {
-                property = "CPU usage",
-                postfix = "\n"
-            });
-
-            Settings.StartText = "StartText\n";
-            Settings.FinalText = "FinalText\n";
-            Settings.UseFrametimeMode = true;
         }
 
         public override bool Begin()
@@ -286,6 +282,11 @@ namespace AfterburnerDataHandler.Servers.Logger
         protected virtual void OnLogStateChanged(ServerStateEventArgs e)
         {
             LogStateChanged?.Invoke(this, e);
+        }
+
+        protected virtual void OnSettingsChanged(EventArgs e)
+        {
+            SettingsChanged?.Invoke(this, e);
         }
     }
 }

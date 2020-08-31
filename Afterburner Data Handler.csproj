@@ -45,6 +45,8 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -219,20 +221,23 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Projects\BaseProject.cs" />
+    <Compile Include="Projects\IProjectElement.cs" />
+    <Compile Include="Projects\LoggerProject.cs" />
+    <Compile Include="Projects\ProjectsUtils.cs" />
+    <Compile Include="Projects\SerialPortProject.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Serialisation\XmlSerialization.cs" />
     <Compile Include="Servers\BaseServer.cs" />
-    <Compile Include="Servers\BaseServerSettings.cs" />
     <Compile Include="Servers\Logger\LoggerServer.cs" />
-    <Compile Include="Servers\Logger\LoggerSettings.cs" />
     <Compile Include="Servers\Serial\SendMode.cs" />
     <Compile Include="Servers\Serial\BaudRate.cs" />
     <Compile Include="Servers\Serial\SerialPortEncoding.cs" />
     <Compile Include="Servers\Serial\SerialPortHandler.cs" />
-    <Compile Include="Servers\Serial\SerialPortSettings.cs" />
     <Compile Include="Servers\Serial\SerialPortServer.cs" />
     <Compile Include="Servers\ServerStateEventArgs.cs" />
     <Compile Include="Servers\RTSS\FrametimeDataEventArgs.cs" />
@@ -360,8 +365,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NewFolder1\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

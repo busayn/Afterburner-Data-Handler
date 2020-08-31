@@ -44,7 +44,7 @@ namespace AfterburnerDataHandler.SharedMemory.Afterburner
             }
         }
 
-        [XmlElement]
+        [XmlArray]
         public MASM_FormattingItemsList FormattingItems
         {
             get { return formattingItems; }

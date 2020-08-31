@@ -1,11 +1,12 @@
-﻿using AfterburnerDataHandler.SharedMemory.Afterburner;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using AfterburnerDataHandler.SharedMemory.Afterburner;
+using AfterburnerDataHandler.Projects;
 
 namespace AfterburnerDataHandler.Servers.Serial
 {
@@ -21,12 +22,15 @@ namespace AfterburnerDataHandler.Servers.Serial
             }
         }
 
-        public SerialPortSettings Settings
+        public SerialPortProject Settings
         {
             get
             {
                 if (settings == null)
-                    settings = new SerialPortSettings();
+                {
+                    settings = new SerialPortProject();
+                    OnSettingsChanged(EventArgs.Empty);
+                }
 
                 return settings;
             }
@@ -34,6 +38,7 @@ namespace AfterburnerDataHandler.Servers.Serial
             {
                 this.Stop();
                 settings = value;
+                OnSettingsChanged(EventArgs.Empty);
             }
         }
 
@@ -59,7 +64,9 @@ namespace AfterburnerDataHandler.Servers.Serial
             }
         }
 
-        private SerialPortSettings settings;
+        public event EventHandler<EventArgs> SettingsChanged;
+
+        private SerialPortProject settings;
         private SerialPortHandler serial;
         private MASM masmData;
         private Timer serialPortTimer;
@@ -212,6 +219,11 @@ namespace AfterburnerDataHandler.Servers.Serial
                 : settings.ConnectionInterval;
 
             serialPortTimer?.Change(connectionInterval, connectionInterval);
+        }
+
+        protected virtual void OnSettingsChanged(EventArgs e)
+        {
+            SettingsChanged?.Invoke(this, e);
         }
     }
 }
