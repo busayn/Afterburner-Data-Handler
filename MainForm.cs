@@ -134,5 +134,22 @@ namespace AfterburnerDataHandler
             base.OnResizeEnd(e);
             this.ResumeLayout();
         }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (ProjectsManager.IsLoggerServerSaved == false ||
+                ProjectsManager.IsSerialPortServerSaved == false)
+            {
+                if (MessageBox.Show(
+                    "If you close the application, all unsaved data will be lost. Are you sure you want to leave the application?",
+                    "Unsaved data found.",
+                    MessageBoxButtons.OKCancel) == DialogResult.Cancel)
+                {
+                    e.Cancel = true;
+                }
+            }
+
+            base.OnClosing(e);
+        }
     }
 }
