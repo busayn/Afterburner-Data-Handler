@@ -63,6 +63,7 @@ namespace AfterburnerDataHandler.Projects
                 project.ProjectFormat ?? string.Empty);
 
             saveFileDialog.Title = "Save " + projectTypeName;
+            saveFileDialog.FileName = project.ProjectName ?? string.Empty;
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
