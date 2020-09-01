@@ -22,5 +22,29 @@ namespace AfterburnerDataHandler.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SerialPort_LastProject {
+            get {
+                return ((string)(this["SerialPort_LastProject"]));
+            }
+            set {
+                this["SerialPort_LastProject"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Logger_LastProject {
+            get {
+                return ((string)(this["Logger_LastProject"]));
+            }
+            set {
+                this["Logger_LastProject"] = value;
+            }
+        }
     }
 }

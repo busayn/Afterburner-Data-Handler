@@ -190,42 +190,17 @@ namespace AfterburnerDataHandler.Controls
 
             SaveServerSettingsButton.Click += (object sender, EventArgs e) =>
             {
-                SaveFileDialog saveFileDialog = new SaveFileDialog
-                {
-                    FileName = this.Server.Settings.ProjectName,
-                    Filter = "ADH Text Log project (*.ADHTL)|*.adhtl|All files (*.*)|*.*"
-                };
-
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    ProjectsUtils.SaveProject(saveFileDialog.FileName, this.Server.Settings);
-                }
-
-                saveFileDialog?.Dispose();
+                ProjectsUtils.ShowSaveProjectDialog(Server.Settings);
             };
 
             LoadServerSettingsButton.Click += (object sender, EventArgs e) =>
             {
-                OpenFileDialog openFileDialog = new OpenFileDialog
-                {
-                    Filter = "ADH Text Log project (*.ADHTL)|*.adhtl|All files (*.*)|*.*"
-                };
+                LoggerProject newProject = Server.Settings;
 
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    LoggerProject currentProject = Server.Settings;
+                ProjectsUtils.ShowOpenProjectDialog(ref newProject);
 
-                    if (ProjectsUtils.LoadProject(openFileDialog.FileName, ref currentProject))
-                    {
-                        Server.Settings = currentProject;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Invalid project file.", "Error", MessageBoxButtons.OK);
-                    }
-                }
-
-                openFileDialog?.Dispose();
+                if (Server.Settings != newProject)
+                    Server.Settings = newProject;
             };
 
             LogNameField.Leave += (object sender, EventArgs e) =>

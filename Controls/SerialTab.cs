@@ -182,38 +182,17 @@ namespace AfterburnerDataHandler.Controls
 
             SaveServerSettingsButton.Click += (object sender, EventArgs e) =>
             {
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.FileName = this.Server.Settings.ProjectName;
-                saveFileDialog.Filter = "ADH Text Serial Port project (*.ADHTS)|*.adhts|All files (*.*)|*.*";
-
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    ProjectsUtils.SaveProject(saveFileDialog.FileName, this.Server.Settings);
-                }
-
-                saveFileDialog?.Dispose();
+                ProjectsUtils.ShowSaveProjectDialog(Server.Settings);
             };
 
             LoadServerSettingsButton.Click += (object sender, EventArgs e) =>
             {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.Filter = "ADH Text Serial Port project (*.ADHTS)|*.adhts|All files (*.*)|*.*";
+                SerialPortProject newProject = Server.Settings;
 
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    SerialPortProject currentProject = Server.Settings;
+                ProjectsUtils.ShowOpenProjectDialog(ref newProject);
 
-                    if (ProjectsUtils.LoadProject(openFileDialog.FileName, ref currentProject))
-                    {
-                        Server.Settings = currentProject;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Invalid project file.", "Error", MessageBoxButtons.OK);
-                    }
-                }
-
-                openFileDialog?.Dispose();
+                if (Server.Settings != newProject)
+                    Server.Settings = newProject;
             };
 
             EditDataButton.Click += (object sender, EventArgs e) =>

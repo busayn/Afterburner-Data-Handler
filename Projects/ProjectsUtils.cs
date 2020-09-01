@@ -4,12 +4,84 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using AfterburnerDataHandler.Serialisation;
 
 namespace AfterburnerDataHandler.Projects
 {
     public class ProjectsUtils
     {
+        public static bool ShowOpenProjectDialog<T>(ref T project) where T : BaseProject, new()
+        {
+            if (project == null) return false;
+
+            T loadedProject = new T();
+            string projectTypeName = GetTypeName<T>();
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            openFileDialog.Filter = string.Format(
+                "{0} (*.{1})|*.{2}|All files (*.*)|*.*",
+                projectTypeName,
+                loadedProject.ProjectFormat?.ToUpper() ?? string.Empty,
+                loadedProject.ProjectFormat ?? string.Empty);
+
+            openFileDialog.Title = "Open " + projectTypeName;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if (LoadProject(openFileDialog.FileName, ref loadedProject))
+                {
+                    project = loadedProject;
+                    openFileDialog?.Dispose();
+                    return true;
+                }
+                else
+                {
+                    MessageBox.Show("Invalid project file.", "Error", MessageBoxButtons.OK);
+                }
+            }
+
+            if (loadedProject is IDisposable)
+                (loadedProject as IDisposable).Dispose();
+
+            openFileDialog?.Dispose();
+
+            return false;
+        }
+
+        public static bool ShowSaveProjectDialog<T>(T project) where T : BaseProject, new()
+        {
+            if (project == null) return false;
+
+            string projectTypeName = GetTypeName<T>();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+            saveFileDialog.Filter = string.Format(
+                "{0} (*.{1})|*.{2}|All files (*.*)|*.*",
+                projectTypeName,
+                project.ProjectFormat?.ToUpper() ?? string.Empty,
+                project.ProjectFormat ?? string.Empty);
+
+            saveFileDialog.Title = "Save " + projectTypeName;
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if (SaveProject(saveFileDialog.FileName, project))
+                {
+                    saveFileDialog?.Dispose();
+                    return true;
+                }
+                else
+                {
+                    MessageBox.Show("Invalid project file.", "Error", MessageBoxButtons.OK);
+                }
+            }
+
+            saveFileDialog?.Dispose();
+
+            return false;
+        }
+
         public static bool LoadProject<T>(string path, ref T target) where T : BaseProject, new()
         {
             try
@@ -77,6 +149,24 @@ namespace AfterburnerDataHandler.Projects
         public static string SerializeProject<T>(T project) where T : BaseProject
         {
             return XmlSerialization.ToXMLString(project);
+        }
+
+        private static string GetTypeName<T>()
+        {
+            string typeName = typeof(T).Name;
+            StringBuilder nameBuilder = new StringBuilder(typeName.Length);
+
+            for (int i = 0; i < typeName.Length; i++)
+            {
+                if (i > 0 && char.IsUpper(typeName[i]) && typeName[i - 1] != ' ')
+                {
+                    nameBuilder.Append(' ');
+                }
+                
+                nameBuilder.Append(typeName[i]);
+            }
+
+            return nameBuilder.ToString();
         }
     }
 }
