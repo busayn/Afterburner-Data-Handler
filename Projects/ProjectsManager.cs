@@ -26,7 +26,7 @@ namespace AfterburnerDataHandler.Projects
         {
             get
             {
-                return !SerialPortServer?.Settings?.IsDirty ?? true;
+                return !LoggerServer?.Settings?.IsDirty ?? true;
             }
         }
 
