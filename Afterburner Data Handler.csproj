@@ -300,12 +300,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FlatControls\VectorIcons.cs" />
-    <Compile Include="Testing\TestForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Testing\TestForm.Designer.cs">
-      <DependentUpon>TestForm.cs</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -313,9 +307,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Testing\TestForm.resx">
-      <DependentUpon>TestForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="LICENSE" />
