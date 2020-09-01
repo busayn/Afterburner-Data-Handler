@@ -11,6 +11,17 @@ namespace AfterburnerDataHandler.FlatControls
 {
     public class FlatTextBox : TextBox
     {
+        [Browsable(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public string LabelText
+        {
+            get { return labelText; }
+            set
+            {
+                labelText = value;
+                this.Invalidate();
+            }
+        }
+
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual bool UseGlobalTheme { get; set; } = true;
 
@@ -58,6 +69,7 @@ namespace AfterburnerDataHandler.FlatControls
 
         protected Theme DefaultTheme { get { return UseGlobalTheme ? Theme.Current : new Theme(); } }
 
+        private string labelText = string.Empty;
         private Theme theme = new Theme();
         private Color disabledTextColor;
         private TextFormatFlags textFormat = TextFormatFlags.TextBoxControl
@@ -96,21 +108,25 @@ namespace AfterburnerDataHandler.FlatControls
         {
             base.WndProc(ref m);
 
-            if (m.Msg == NativeMethods.WM_PAINT && this.Enabled == false && this.IsHandleCreated == true)
+            if (m.Msg == NativeMethods.WM_PAINT && this.IsHandleCreated == true)
             {
-                Graphics g = m.HWnd != IntPtr.Zero ? Graphics.FromHwnd(m.HWnd) : null;
-
-                if (g != null)
+                if (this.Enabled == false ||
+                    string.IsNullOrEmpty(this.Text) && !string.IsNullOrEmpty(this.LabelText) && this.Focused == false)
                 {
-                    DrawingUtils.FillRectangle(g, this.BackColor, this.ClientRectangle);
+                    Graphics g = m.HWnd != IntPtr.Zero ? Graphics.FromHwnd(m.HWnd) : null;
 
-                    TextRenderer.DrawText(
-                        g,
-                        this.Text,
-                        this.Font,
-                        this.ClientRectangle,
-                        this.DisabledTextColor,
-                        this.textFormat);
+                    if (g != null)
+                    {
+                        DrawingUtils.FillRectangle(g, this.BackColor, this.ClientRectangle);
+
+                        TextRenderer.DrawText(
+                            g,
+                            this.Enabled == true ? this.LabelText : this.Text,
+                            this.Font,
+                            this.ClientRectangle,
+                            this.DisabledTextColor,
+                            this.textFormat);
+                    }
                 }
             }
         }
@@ -170,6 +186,14 @@ namespace AfterburnerDataHandler.FlatControls
                 this.textFormat &= ~TextFormatFlags.WordBreak;
                 this.textFormat |= TextFormatFlags.NoPadding;
             }
+        }
+
+        protected override void OnTextChanged(EventArgs e)
+        {
+            base.OnTextChanged(e);
+
+            if (string.IsNullOrEmpty(this.Text))
+                this.Invalidate();
         }
     }
 }

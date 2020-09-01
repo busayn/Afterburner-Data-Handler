@@ -393,6 +393,7 @@ namespace AfterburnerDataHandler.Controls
             this.TargetPortField = new DropdownInputField
             {
                 Font = MainForm.MainFont,
+                LabelText = "Target Port",
                 Text = Properties.Settings.Default.SerialPort_LastPort
             };
             ControlPanel.Controls.Add(TargetPortField);

@@ -13,6 +13,17 @@ namespace AfterburnerDataHandler.FlatControls
 {
     public class InputField : UserControl, IThemedControl
     {
+        [Browsable(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public string LabelText
+        {
+            get { return this.TextBox.LabelText; }
+            set
+            {
+                this.TextBox.LabelText = value;
+                this.Invalidate();
+            }
+        }
+
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual bool UseGlobalTheme { get; set; } = true;
 
@@ -78,7 +89,30 @@ namespace AfterburnerDataHandler.FlatControls
         }
 
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public virtual FlatTextBox TextBox { get { return textBox; } protected set { textBox = value; } }
+        public virtual FlatTextBox TextBox
+        {
+            get
+            {
+                if (textBox == null)
+                {
+                    textBox = new FlatTextBox
+                    {
+                        UseGlobalTheme = false,
+                        Theme = this.Theme
+                    };
+
+                    textBox.TextChanged += TextBoxTextChanged;
+
+                    this.Controls.Add(this.textBox);
+                }
+
+                return textBox;
+            }
+            protected set
+            {
+                textBox = value;
+            }
+        }
 
         [Browsable(true), Category("Appearance")]
         public virtual int BorderSize
@@ -97,10 +131,10 @@ namespace AfterburnerDataHandler.FlatControls
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override string Text
         {
-            get { return this.TextBox?.Text; }
+            get { return this.TextBox.Text; }
             set
             {
-                if (TextBox != null) TextBox.Text = value;
+                TextBox.Text = value;
             }
         }
 
@@ -154,18 +188,6 @@ namespace AfterburnerDataHandler.FlatControls
         public InputField()
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.DoubleBuffer, true);
-            this.ForeColor = Color.FromArgb(255, 255, 255);
-
-            this.TextBox = new FlatTextBox
-            {
-                Text = this.Text,
-                UseGlobalTheme = false,
-                Theme = this.Theme
-            };
-
-            this.TextBox.TextChanged += TextBoxTextChanged;
-            this.Controls.Add(this.TextBox);
-
             this.Theme = DefaultTheme;
             Theme.GlobalThemeChanged += GlobalThemeChanged;
         }
@@ -218,15 +240,12 @@ namespace AfterburnerDataHandler.FlatControls
             Padding viewPadding = this.Padding;
             int lineSize = BorderSize;
 
-            if (this.TextBox != null)
-            {
-                this.TextBox.Width = viewRect.Width - viewPadding.Horizontal;
+            this.TextBox.Width = viewRect.Width - viewPadding.Horizontal;
 
-                this.TextBox.Location = new Point(
-                    viewRect.Left + viewPadding.Left,
-                    viewRect.Top + (viewRect.Height - TextBox.Height) / 2
-                        + viewPadding.Top - viewPadding.Bottom - lineSize / 2);
-            }
+            this.TextBox.Location = new Point(
+                viewRect.Left + viewPadding.Left,
+                viewRect.Top + (viewRect.Height - TextBox.Height) / 2
+                    + viewPadding.Top - viewPadding.Bottom - lineSize / 2);
 
             this.Invalidate();
         }
