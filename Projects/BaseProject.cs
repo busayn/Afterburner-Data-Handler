@@ -57,7 +57,7 @@ namespace AfterburnerDataHandler.Projects
 
         protected virtual void SetParameter<T>(ref T parameter, T value)
         {
-            bool parameterChanged = !parameter.Equals(value);
+            bool parameterChanged = !parameter?.Equals(value) ?? true;
             parameter = value;
             if (parameterChanged == true) IsDirty = true;
 

@@ -112,8 +112,26 @@ namespace AfterburnerDataHandler.Projects
         [XmlElement]
         public MASM_Formatting DataFormatter
         {
-            get { return dataFormatter; }
-            set { SetParameter(ref dataFormatter, value); }
+            get
+            {
+                if (dataFormatter == null)
+                {
+                    dataFormatter = new MASM_Formatting();
+                    dataFormatter.ParameterChanged += DataFormatterChanged;
+                }
+
+                return dataFormatter;
+            }
+            set
+            {
+                if (dataFormatter != null)
+                    dataFormatter.ParameterChanged -= DataFormatterChanged;
+
+                SetParameter(ref dataFormatter, value);
+
+                if (dataFormatter != null)
+                    dataFormatter.ParameterChanged += DataFormatterChanged;
+            }
         }
 
         private string projectFormat = "adhts";
@@ -134,15 +152,11 @@ namespace AfterburnerDataHandler.Projects
         private int connectionCheckInterval = 5000;
         private string dataRequest = "Send Data";
 
-        private MASM_Formatting dataFormatter = new MASM_Formatting();
-
-        public SerialPortProject()
-        {
-            DataFormatter.ParameterChanged += DataFormatterChanged;
-        }
+        private MASM_Formatting dataFormatter;
 
         private void DataFormatterChanged(object sender, EventArgs e)
         {
+            Console.WriteLine("DataFormatterChanged");
             IsDirty = true;
         }
     }

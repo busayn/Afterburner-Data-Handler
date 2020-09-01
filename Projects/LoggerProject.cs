@@ -62,8 +62,26 @@ namespace AfterburnerDataHandler.Projects
         [XmlElement]
         public MASM_Formatting DataFormatter
         {
-            get { return dataFormatter; }
-            set { SetParameter(ref dataFormatter, value); }
+            get
+            {
+                if (dataFormatter == null)
+                {
+                    dataFormatter = new MASM_Formatting();
+                    dataFormatter.ParameterChanged += DataFormatterChanged;
+                }
+
+                return dataFormatter;
+            }
+            set
+            {
+                if (dataFormatter != null)
+                    dataFormatter.ParameterChanged -= DataFormatterChanged;
+
+                SetParameter(ref dataFormatter, value);
+
+                if (dataFormatter != null)
+                    dataFormatter.ParameterChanged += DataFormatterChanged;
+            }
         }
 
         private string projectFormat = "adhtl";
@@ -73,12 +91,7 @@ namespace AfterburnerDataHandler.Projects
         private bool useFrametimeMode = false;
         private string startText = "";
         private string finalText = "";
-        private MASM_Formatting dataFormatter = new MASM_Formatting();
-
-        public LoggerProject()
-        {
-            DataFormatter.ParameterChanged += DataFormatterChanged;
-        }
+        private MASM_Formatting dataFormatter;
 
         private void DataFormatterChanged(object sender, EventArgs e)
         {
