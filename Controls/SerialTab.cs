@@ -12,6 +12,7 @@ using AfterburnerDataHandler.FlatControls;
 using AfterburnerDataHandler.Projects;
 using AfterburnerDataHandler.Servers;
 using AfterburnerDataHandler.Servers.Serial;
+using AfterburnerDataHandler.SharedMemory.Afterburner;
 
 namespace AfterburnerDataHandler.Controls
 {
@@ -677,6 +678,11 @@ namespace AfterburnerDataHandler.Controls
             editor.AdditionalProperties.Add(decimalSeparatorProperty);
             editor.AdditionalProperties.Add(encodingProperty);
             editor.AdditionalProperties.Add(endOfLineCharProperty);
+
+            editor.AvailableProperties = () =>
+            {
+                return new List<string>(new MASM().UpdateOnce().GetPropertiesList());
+            };
 
             editor.Apply += (object sender, EventArgs e) =>
             {

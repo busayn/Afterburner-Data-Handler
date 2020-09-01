@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using AfterburnerDataHandler.FlatControls;
 using AfterburnerDataHandler.Projects;
 using AfterburnerDataHandler.Servers.Logger;
+using AfterburnerDataHandler.SharedMemory.Afterburner;
 
 namespace AfterburnerDataHandler.Controls
 {
@@ -491,6 +492,20 @@ namespace AfterburnerDataHandler.Controls
             editor.AdditionalProperties.Add(globalPrefixProperty);
             editor.AdditionalProperties.Add(globalPostfixProperty);
             editor.AdditionalProperties.Add(decimalSeparatorProperty);
+
+            editor.AvailableProperties = () =>
+            {
+                List<string> properties = new List<string>(new MASM().UpdateOnce().GetPropertiesList());
+
+                if (Server.Settings.UseFrametimeMode == true)
+                {
+                    properties.Insert(0, "Frame duration");
+                    properties.Insert(0, "Frame time");
+                    properties.Insert(0, "Current frame");
+                }
+
+                return properties;
+            };
 
             editor.Apply += (object sender, EventArgs e) =>
             {

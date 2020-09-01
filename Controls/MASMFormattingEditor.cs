@@ -54,23 +54,13 @@ namespace AfterburnerDataHandler.Controls
 
         public event EventHandler<EventArgs> Apply;
         public event EventHandler<EventArgs> Cancel;
+        public Func<List<string>> AvailableProperties;
 
-        private Func<string[]> AvailableProperties;
 
         public MASMFormattingEditor()
         {
             InitializeGUI();
             InitializeHandles();
-
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    this.AdditionalProperties.Add(new FlatButton { Text = "Button " + i });
-            //}
-
-            //for (int i = 0; i < 3; i++)
-            //{
-            //    this.Items.Add(new MASM_StringFormattingItem(MASM_FormattingItemMode.Property));
-            //}
         }
 
         protected virtual void InitializeGUI()
@@ -186,8 +176,6 @@ namespace AfterburnerDataHandler.Controls
                 this.Items.Add(new MASM_FormattingItem(MASM_FormattingItem.ItemMode.Property));
             };
 
-            this.AvailableProperties = GetAvailableProperties;
-
             this.ApplyButton.Click += (object sender, EventArgs e) =>
             {
                 OnApply(e);
@@ -203,11 +191,6 @@ namespace AfterburnerDataHandler.Controls
                     OnCancel(e);
                 }
             };
-        }
-
-        public string[] GetAvailableProperties()
-        {
-            return new MASM().UpdateOnce().GetPropertiesList();
         }
 
         protected void OnApply(EventArgs e)

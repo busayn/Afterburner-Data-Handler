@@ -346,6 +346,14 @@ namespace AfterburnerDataHandler.FlatControls
                 }
             }
 
+            public void AddRange(IEnumerable<object> collection)
+            {
+                foreach (object item in collection)
+                {
+                    this.Add(item);
+                }
+            }
+
             public void Remove(object item)
             {
                 for (int i = 0; i < items.Count; i++)

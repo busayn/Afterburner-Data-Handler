@@ -103,7 +103,7 @@ namespace AfterburnerDataHandler.Controls
             }
         }
 
-        public Func<string[]> AvailableProperties;
+        public Func<List<string>> AvailableProperties;
 
         protected virtual Rectangle ParametersRect
         {
@@ -676,11 +676,10 @@ namespace AfterburnerDataHandler.Controls
             if (sender is DropdownInputField && AvailableProperties != null)
             {
                 DropdownInputField dropdown = sender as DropdownInputField;
-                string[] properties = AvailableProperties?.Invoke();
+                List<string> properties = AvailableProperties?.Invoke();
 
                 if (properties == null) return;
 
-                //dropdown.Focus();
                 dropdown.Items.Clear();
                 dropdown.Items.AddRange(properties);
             }
