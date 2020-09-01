@@ -11,10 +11,8 @@ namespace AfterburnerDataHandler.Projects
 {
     public class ProjectsUtils
     {
-        public static bool ShowOpenProjectDialog<T>(ref T project) where T : BaseProject, new()
+        public static string ShowOpenProjectDialog<T>(ref T project) where T : BaseProject, new()
         {
-            if (project == null) return false;
-
             T loadedProject = new T();
             string projectTypeName = GetTypeName<T>();
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -29,11 +27,13 @@ namespace AfterburnerDataHandler.Projects
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                if (LoadProject(openFileDialog.FileName, ref loadedProject))
+                string targetPath = openFileDialog.FileName;
+
+                if (LoadProject(targetPath, ref loadedProject))
                 {
                     project = loadedProject;
                     openFileDialog?.Dispose();
-                    return true;
+                    return targetPath;
                 }
                 else
                 {
@@ -46,12 +46,12 @@ namespace AfterburnerDataHandler.Projects
 
             openFileDialog?.Dispose();
 
-            return false;
+            return null;
         }
 
-        public static bool ShowSaveProjectDialog<T>(T project) where T : BaseProject, new()
+        public static string ShowSaveProjectDialog<T>(T project) where T : BaseProject, new()
         {
-            if (project == null) return false;
+            if (project == null) return null;
 
             string projectTypeName = GetTypeName<T>();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -67,10 +67,12 @@ namespace AfterburnerDataHandler.Projects
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
+                string targetPath = saveFileDialog.FileName;
+
                 if (SaveProject(saveFileDialog.FileName, project))
                 {
                     saveFileDialog?.Dispose();
-                    return true;
+                    return targetPath;
                 }
                 else
                 {
@@ -80,7 +82,7 @@ namespace AfterburnerDataHandler.Projects
 
             saveFileDialog?.Dispose();
 
-            return false;
+            return null;
         }
 
         public static bool LoadProject<T>(string path, ref T target) where T : BaseProject, new()

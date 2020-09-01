@@ -190,14 +190,25 @@ namespace AfterburnerDataHandler.Controls
 
             SaveServerSettingsButton.Click += (object sender, EventArgs e) =>
             {
-                ProjectsUtils.ShowSaveProjectDialog(Server.Settings);
+                string projectPath = ProjectsUtils.ShowSaveProjectDialog(Server.Settings);
+
+                if (projectPath != null)
+                {
+                    Properties.Settings.Default.Logger_LastProject = projectPath;
+                    Properties.Settings.Default.Save();
+                }
             };
 
             LoadServerSettingsButton.Click += (object sender, EventArgs e) =>
             {
-                LoggerProject newProject = Server.Settings;
+                LoggerProject newProject = null;
+                string projectPath = ProjectsUtils.ShowOpenProjectDialog(ref newProject);
 
-                ProjectsUtils.ShowOpenProjectDialog(ref newProject);
+                if (projectPath != null)
+                {
+                    Properties.Settings.Default.Logger_LastProject = projectPath;
+                    Properties.Settings.Default.Save();
+                }
 
                 if (Server.Settings != newProject)
                     Server.Settings = newProject;

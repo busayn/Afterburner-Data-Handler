@@ -224,6 +224,7 @@
     <Compile Include="Projects\BaseProject.cs" />
     <Compile Include="Projects\IProjectElement.cs" />
     <Compile Include="Projects\LoggerProject.cs" />
+    <Compile Include="Projects\ProjectsManager.cs" />
     <Compile Include="Projects\ProjectsUtils.cs" />
     <Compile Include="Projects\SerialPortProject.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

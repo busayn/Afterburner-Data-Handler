@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using AfterburnerDataHandler.FlatControls;
 using AfterburnerDataHandler.Servers;
 using AfterburnerDataHandler.Controls;
+using AfterburnerDataHandler.Projects;
 
 namespace AfterburnerDataHandler
 {
@@ -106,6 +107,12 @@ namespace AfterburnerDataHandler
             this.MainMenu.Controls.Add(RemoteTab);
             this.MainMenu.Controls.Add(LoggerTab);
             this.MainMenu.Controls.Add(SettingsTab);
+
+            ProjectsManager.SerialPortServer = SerialTab.Server;
+            ProjectsManager.LoggerServer = LoggerTab.Server;
+
+            ProjectsManager.LoadLastSerialPortProject();
+            ProjectsManager.LoadLastLoggerProject();
         }
 
         public static void ShowControl(Control control)
