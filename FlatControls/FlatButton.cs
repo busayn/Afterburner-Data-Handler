@@ -234,7 +234,11 @@ namespace AfterburnerDataHandler.FlatControls
                 labelColor,
                 this.textFormat);
 
-            DrawingUtils.DrawIcon(pevent.Graphics, this.iconRect, this.Icon, IconMultiplyColor);
+            DrawingUtils.DrawIcon(
+                pevent.Graphics,
+                this.iconRect,
+                this.Icon,
+                this.Enabled == true ? IconMultiplyColor : DisabledTextColor);
         }
 
         protected override void OnHandleCreated(EventArgs e)

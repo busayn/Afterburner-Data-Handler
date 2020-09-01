@@ -55,6 +55,16 @@ namespace AfterburnerDataHandler.FlatControls
         }
 
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public virtual Color DisabledTextColor
+        {
+            get { return disabledTextColor; }
+            set
+            {
+                disabledTextColor = value;
+            }
+        }
+
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual Color BackgroundColor
         {
             get { return backgroundColor; }
@@ -93,6 +103,7 @@ namespace AfterburnerDataHandler.FlatControls
 
         private Theme theme = new Theme();
         private Color textColor = Color.FromArgb(255, 255, 255);
+        private Color disabledTextColor = Color.FromArgb(255, 255, 255);
         private Color backgroundColor = Color.FromArgb(0, 0, 0);
         private Theme.BackgroundSource backgroundSource = Theme.BackgroundSource.Theme;
 
@@ -114,9 +125,9 @@ namespace AfterburnerDataHandler.FlatControls
         {
             this.BackgroundColor = Theme.PanelBackgroundColor;
             this.TextColor = Theme.TextColor;
+            this.DisabledTextColor = Theme.DisabledTextColor;
             this.Invalidate();
         }
-
 
         public virtual void OnThemeDataChanged(EventArgs e)
         {

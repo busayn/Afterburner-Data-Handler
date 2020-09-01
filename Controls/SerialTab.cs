@@ -314,14 +314,14 @@ namespace AfterburnerDataHandler.Controls
             ConnectionCheckField.Value = Server.Settings.ConnectionCheckInterval;
             DataRequestField.Text = Server.Settings.DataRequest;
 
-            AutoConnectRequestField.Enabled = Server.Settings.AutoConnect;
-            AutoConnectResponseField.Enabled = Server.Settings.AutoConnect;
-            AutoConnectResponseTimeoutField.Enabled = Server.Settings.AutoConnect;
-            ConnectionIntervalField.Enabled = !Server.Settings.AutoConnect;
+            AutoConnectRequestProperty.Enabled = Server.Settings.AutoConnect;
+            AutoConnectResponseProperty.Enabled = Server.Settings.AutoConnect;
+            AutoConnectResponseTimeoutProperty.Enabled = Server.Settings.AutoConnect;
+            ConnectionIntervalProperty.Enabled = !Server.Settings.AutoConnect;
 
-            MessageIntervalField.Enabled = Server.Settings.SendMode == SendMode.Stream;
-            ConnectionCheckField.Enabled = Server.Settings.SendMode == SendMode.Request;
-            DataRequestField.Enabled = Server.Settings.SendMode == SendMode.Request;
+            MessageIntervalProperty.Enabled = Server.Settings.SendMode == SendMode.Stream;
+            ConnectionCheckProperty.Enabled = Server.Settings.SendMode == SendMode.Request;
+            DataRequestProperty.Enabled = Server.Settings.SendMode == SendMode.Request;
         }
 
         protected virtual void InitializeGUI()

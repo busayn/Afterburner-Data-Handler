@@ -214,7 +214,7 @@ namespace AfterburnerDataHandler.FlatControls
                 this.Text,
                 this.Font,
                 this.LabelRect,
-                this.TextColor,
+                this.Enabled == true ? TextColor : DisabledTextColor,
                 this.textFormat);
         }
 
