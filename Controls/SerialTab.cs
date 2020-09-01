@@ -22,6 +22,7 @@ namespace AfterburnerDataHandler.Controls
 
         // Server Control Panel
         public PropertyContainer ControlPanel { get; protected set; }
+        public DropdownInputField TargetPortField { get; protected set; }
         public FlatButton StartServerButton { get; protected set; }
 
         // Server Parameters Panel
@@ -108,8 +109,10 @@ namespace AfterburnerDataHandler.Controls
             UpdateValues();
             Server.Settings.IsDirty = false;
         }
+
         protected virtual void InitializeServer()
         {
+            Server.TargetPort = Properties.Settings.Default.SerialPort_LastPort;
             Server.StateChanged += ServerStateChanged;
 
             EventHandler<EventArgs> updateValues = (object sender, EventArgs e) =>
@@ -141,6 +144,7 @@ namespace AfterburnerDataHandler.Controls
                         this.StartServerButton.Text = "Stop Server";
                         this.StartServerButton.Icon = Properties.Resources.stop;
                         this.ParametersPanel.Enabled = false;
+                        this.TargetPortField.Enabled = false;
                     });
                     break;
 
@@ -150,7 +154,7 @@ namespace AfterburnerDataHandler.Controls
                 case Servers.ServerState.Connected:
                     ControlUtils.AsyncSafeInvoke(this, () =>
                     {
-
+                        Console.WriteLine(Server.OpenPort);
                     });
                     break;
 
@@ -163,6 +167,7 @@ namespace AfterburnerDataHandler.Controls
                         this.StartServerButton.Text = "Start Server";
                         this.StartServerButton.Icon = Properties.Resources.play;
                         this.ParametersPanel.Enabled = true;
+                        this.TargetPortField.Enabled = true;
                     });
                     break;
             }
@@ -178,6 +183,38 @@ namespace AfterburnerDataHandler.Controls
                     Server?.Begin();
                 else
                     Server?.Stop();
+            };
+
+            TargetPortField.DropDown += (object sender, EventArgs e) =>
+            {
+                if (sender is DropdownInputField)
+                {
+                    DropdownInputField dropdown = sender as DropdownInputField;
+                    List<string> availablePorts = Server.Serial.GetAvailablePorts();
+
+                    if (availablePorts == null) return;
+
+                    dropdown.Items.Clear();
+                    dropdown.Items.AddRange(availablePorts);
+                }
+            };
+
+            TargetPortField.ItemSelected += (object sender, ItemEventArgs e) =>
+            {
+                string port = TargetPortField.Text;
+
+                Server.TargetPort = port;
+                Properties.Settings.Default.SerialPort_LastPort = port;
+                Properties.Settings.Default.Save();
+            };
+
+            TargetPortField.Leave += (object sender, EventArgs e) =>
+            {
+                string port = TargetPortField.Text;
+
+                Server.TargetPort = port;
+                Properties.Settings.Default.SerialPort_LastPort = port;
+                Properties.Settings.Default.Save();
             };
 
             SaveServerSettingsButton.Click += (object sender, EventArgs e) =>
@@ -341,6 +378,13 @@ namespace AfterburnerDataHandler.Controls
                 Font = MainForm.MainFont
             };
             ControlPanel.Controls.Add(StartServerButton);
+
+            this.TargetPortField = new DropdownInputField
+            {
+                Font = MainForm.MainFont,
+                Text = Properties.Settings.Default.SerialPort_LastPort
+            };
+            ControlPanel.Controls.Add(TargetPortField);
 
             this.ParametersPanel = new VerticalListContainer
             {
@@ -629,6 +673,11 @@ namespace AfterburnerDataHandler.Controls
                 Text = "Serial Port Data Editor",
             };
 
+            editor.AvailableProperties = () =>
+            {
+                return new List<string>(new MASM().UpdateOnce().GetPropertiesList());
+            };
+
             editor.Items.AddRange(this.Server.Settings.DataFormatter.FormattingItems);
 
             InputField globalPrefixField = new InputField { Text = this.Server.Settings.DataFormatter.GlobalPrefix };
@@ -657,11 +706,6 @@ namespace AfterburnerDataHandler.Controls
             editor.AdditionalProperties.Add(decimalSeparatorProperty);
             editor.AdditionalProperties.Add(encodingProperty);
             editor.AdditionalProperties.Add(endOfLineCharProperty);
-
-            editor.AvailableProperties = () =>
-            {
-                return new List<string>(new MASM().UpdateOnce().GetPropertiesList());
-            };
 
             editor.Apply += (object sender, EventArgs e) =>
             {

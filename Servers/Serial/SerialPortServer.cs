@@ -22,6 +22,11 @@ namespace AfterburnerDataHandler.Servers.Serial
             }
         }
 
+        public string OpenPort
+        {
+            get { return currentPort; }
+        }
+
         public SerialPortProject Settings
         {
             get
@@ -143,6 +148,7 @@ namespace AfterburnerDataHandler.Servers.Serial
                 {
                     if (Serial.Open(targetPort, (int)Settings.PortSpeed))
                     {
+                        currentPort = targetPort;
                         this.ServerState = ServerState.Connected;
                     }
                 }

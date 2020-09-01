@@ -442,6 +442,20 @@ namespace AfterburnerDataHandler.Controls
                 Text = "Log Data Editor",
             };
 
+            editor.AvailableProperties = () =>
+            {
+                List<string> properties = new List<string>(new MASM().UpdateOnce().GetPropertiesList());
+
+                if (Server.Settings.UseFrametimeMode == true)
+                {
+                    properties.Insert(0, "Frame duration");
+                    properties.Insert(0, "Frame time");
+                    properties.Insert(0, "Current frame");
+                }
+
+                return properties;
+            };
+
             editor.Items.AddRange(this.Server.Settings.DataFormatter.FormattingItems);
 
             InputField startTextField = new InputField { Text = this.Server.Settings.StartText };
@@ -467,20 +481,6 @@ namespace AfterburnerDataHandler.Controls
             editor.AdditionalProperties.Add(globalPrefixProperty);
             editor.AdditionalProperties.Add(globalPostfixProperty);
             editor.AdditionalProperties.Add(decimalSeparatorProperty);
-
-            editor.AvailableProperties = () =>
-            {
-                List<string> properties = new List<string>(new MASM().UpdateOnce().GetPropertiesList());
-
-                if (Server.Settings.UseFrametimeMode == true)
-                {
-                    properties.Insert(0, "Frame duration");
-                    properties.Insert(0, "Frame time");
-                    properties.Insert(0, "Current frame");
-                }
-
-                return properties;
-            };
 
             editor.Apply += (object sender, EventArgs e) =>
             {

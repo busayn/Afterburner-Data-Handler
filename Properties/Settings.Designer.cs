@@ -46,5 +46,17 @@ namespace AfterburnerDataHandler.Properties {
                 this["Logger_LastProject"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SerialPort_LastPort {
+            get {
+                return ((string)(this["SerialPort_LastPort"]));
+            }
+            set {
+                this["SerialPort_LastPort"] = value;
+            }
+        }
     }
 }
