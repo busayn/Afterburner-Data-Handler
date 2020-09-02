@@ -58,5 +58,137 @@ namespace AfterburnerDataHandler.Properties {
                 this["SerialPort_LastPort"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SerialPort_Autorun {
+            get {
+                return ((bool)(this["SerialPort_Autorun"]));
+            }
+            set {
+                this["SerialPort_Autorun"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SerialPort_OpenLastProject {
+            get {
+                return ((bool)(this["SerialPort_OpenLastProject"]));
+            }
+            set {
+                this["SerialPort_OpenLastProject"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SerialPort_ServerNotifications {
+            get {
+                return ((bool)(this["SerialPort_ServerNotifications"]));
+            }
+            set {
+                this["SerialPort_ServerNotifications"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SerialPort_PortsWhitelist {
+            get {
+                return ((string)(this["SerialPort_PortsWhitelist"]));
+            }
+            set {
+                this["SerialPort_PortsWhitelist"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SerialPort_PortsBlacklist {
+            get {
+                return ((string)(this["SerialPort_PortsBlacklist"]));
+            }
+            set {
+                this["SerialPort_PortsBlacklist"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Logger_Autorun {
+            get {
+                return ((bool)(this["Logger_Autorun"]));
+            }
+            set {
+                this["Logger_Autorun"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Logger_OpenLastProject {
+            get {
+                return ((bool)(this["Logger_OpenLastProject"]));
+            }
+            set {
+                this["Logger_OpenLastProject"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Logger_ServerNotifications {
+            get {
+                return ((bool)(this["Logger_ServerNotifications"]));
+            }
+            set {
+                this["Logger_ServerNotifications"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Logger_LoggingNotifications {
+            get {
+                return ((bool)(this["Logger_LoggingNotifications"]));
+            }
+            set {
+                this["Logger_LoggingNotifications"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Logger_LogPath {
+            get {
+                return ((string)(this["Logger_LogPath"]));
+            }
+            set {
+                this["Logger_LogPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Logger_LogHotkey {
+            get {
+                return ((string)(this["Logger_LogHotkey"]));
+            }
+            set {
+                this["Logger_LogHotkey"] = value;
+            }
+        }
     }
 }

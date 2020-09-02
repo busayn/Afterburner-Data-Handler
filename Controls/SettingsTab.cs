@@ -16,9 +16,74 @@ namespace AfterburnerDataHandler.Controls
 {
     public class SettingsTab : TabPanel
     {
+        public VerticalListContainer MainContainer { get; protected set; }
+        public PropertyContainer Header { get; protected set; }
+        public FlexColumnContainer SettingsContainer { get; protected set; }
+        public LoggerSettingsPanel LoggerSettings { get; protected set; }
+        public SerialSettingsPanel SerialSettings { get; protected set; }
+
         public SettingsTab()
         {
+            InitializeGUI();
+        }
 
+        protected virtual void InitializeGUI()
+        {
+            this.MainContainer = new VerticalListContainer
+            {
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                Padding = new Padding(0),
+                AutoScrollOffset = new Point(0),
+                BackgroundSource = Theme.BackgroundSource.Inherit
+            };
+            this.Controls.Add(MainContainer);
+
+            this.Header = new PropertyContainer
+            {
+                Text = "Settings",
+                Height = 38,
+                AutoScroll = false,
+                MinimumSize = new Size(380, 20),
+                FitContent = false,
+                ControlsAlignment = HorizontalAlignment.Right,
+                Padding = new Padding(3),
+                Margin = new Padding(16, 16, 16, 6),
+                MaximumSize = new Size(1200, int.MaxValue),
+                Font = MainForm.HeaderFont
+            };
+            MainContainer.Controls.Add(Header);
+
+            this.SettingsContainer = new FlexColumnContainer
+            {
+                AutoScroll = false,
+                Height = 600,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                ColumnsLayout = FlexColumnsLayoutEngine.ColumnsLayout.HorizontalGrid,
+                Padding = new Padding(10, 0, 10, 0),
+                Margin = new Padding(0),
+                MaximumSize = new Size(1232, int.MaxValue),
+                BackgroundSource = Theme.BackgroundSource.Inherit,
+                MinColumnCount = 1,
+                MaxColumnCount = 4,
+                MinColumnSize = 260,
+                MaxColumnSize = 0,
+            };
+            MainContainer.Controls.Add(SettingsContainer);
+
+            this.LoggerSettings = new LoggerSettingsPanel
+            {
+                Margin = new Padding(6)
+            };
+            SettingsContainer.Controls.Add(LoggerSettings);
+
+            this.SerialSettings = new SerialSettingsPanel
+            {
+                Margin = new Padding(6)
+            };
+            SettingsContainer.Controls.Add(SerialSettings);
         }
     }
 }

@@ -157,6 +157,12 @@
     <Compile Include="Controls\RemoteTab.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\SerialSettingsPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\LoggerSettingsPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\SettingsTab.cs">
       <SubType>Component</SubType>
     </Compile>

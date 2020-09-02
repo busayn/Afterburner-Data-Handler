@@ -734,11 +734,11 @@ namespace AfterburnerDataHandler.FlatControls
             this.SuspendLayout();
             foreach (Control c in this.Controls)
             {
-                if (c == tab) c?.Show();
-                else c?.Hide();
+                if (c == tab) c.Show();
+                else c.Hide();
             }
+            this.Select();
             this.ResumeLayout();
-
             return true;
         }
 

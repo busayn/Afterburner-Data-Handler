@@ -35,8 +35,8 @@ namespace AfterburnerDataHandler.FlatControls
 
         public override Size GetPreferredSize(Size proposedSize)
         {
-            int totalWidth = this.Padding.Left;
-            int totalHeight = this.Padding.Top;
+            int totalWidth = 0;
+            int totalHeight = 0;
 
             foreach (Control c in this.Controls)
             {
@@ -44,20 +44,17 @@ namespace AfterburnerDataHandler.FlatControls
 
                 if (c.AutoSize == true)
                 {
-                    controlRect.Size = c.GetPreferredSize(this.ClientSize + this.Padding.Size);
+                    controlRect.Size = c.GetPreferredSize(this.ClientSize - this.Padding.Size);
                 }
 
-                controlRect.Size += new Size(c.Margin.Right, c.Margin.Bottom);
+                controlRect.Size += c.Margin.Size;
 
-                if (controlRect.Right > totalWidth)
-                    totalWidth = controlRect.Right;
-
-                if (controlRect.Bottom > totalHeight)
-                    totalHeight = controlRect.Bottom;
+                totalWidth = Math.Max(totalWidth, controlRect.Width);
+                totalHeight += controlRect.Height;
             }
 
-            totalWidth += this.Padding.Right;
-            totalHeight += this.Padding.Bottom;
+            totalWidth += this.Padding.Horizontal;
+            totalHeight += this.Padding.Vertical;
 
             if (this.MaximumSize.Width > 0)
                 totalWidth = Math.Min(this.MaximumSize.Width, totalWidth);
@@ -68,6 +65,7 @@ namespace AfterburnerDataHandler.FlatControls
             return new Size(
                 Math.Max(this.MinimumSize.Width, totalWidth),
                 Math.Max(this.MinimumSize.Height, totalHeight));
+
         }
     }
 }
