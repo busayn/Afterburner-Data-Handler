@@ -221,6 +221,7 @@
     <Compile Include="FlatControls\ThemedUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="HotkeysHandler\Hotkey.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
