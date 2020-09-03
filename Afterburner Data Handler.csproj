@@ -222,6 +222,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="HotkeysHandler\Hotkey.cs" />
+    <Compile Include="HotkeysHandler\HotkeyUtils.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

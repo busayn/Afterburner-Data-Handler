@@ -55,6 +55,20 @@ namespace AfterburnerDataHandler.HotkeysHandler
             }
         }
 
+        public override string ToString()
+        {
+            string hotkeyName = string.Empty;
+            Keys keyModifiers = HotkeyUtils.GetModifierKeys(Modifiers);
+
+            if ((keyModifiers & Keys.Control) == Keys.Control) hotkeyName += "Ctrl + ";
+            if ((keyModifiers & Keys.Alt) == Keys.Alt) hotkeyName += "Alt + ";
+            if ((keyModifiers & Keys.Shift) == Keys.Shift) hotkeyName += "Shift + ";
+
+            hotkeyName += HotkeyUtils.GetKeyName(Key & ~HotkeyUtils.modifierKeysMask);
+
+            return hotkeyName;
+        }
+
         protected virtual void OnHotkeyPressed(EventArgs e)
         {
             if (hotkeySuspendCount < 1)
@@ -166,38 +180,6 @@ namespace AfterburnerDataHandler.HotkeysHandler
             }
         }
 
-        public static Keys GetModifierKeys(Keys keys)
-        {
-            switch (keys)
-            {
-                case Keys.Shift:
-                case Keys.ShiftKey:
-                case Keys.LShiftKey:
-                case Keys.RShiftKey:
-                    return Keys.Shift;
-
-                case Keys.Control:
-                case Keys.ControlKey:
-                case Keys.LControlKey:
-                case Keys.RControlKey:
-                    return Keys.Control;
-
-                case Keys.Alt:
-                case Keys.Menu:
-                case Keys.LMenu:
-                case Keys.RMenu:
-                    return Keys.Alt;
-
-                case Keys.LWin:
-                    return Keys.LWin;
-
-                case Keys.RWin:
-                    return Keys.RWin;
-            }
-
-            return Keys.None;
-        }
-
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr SetWindowsHookEx(HookType hookType, HookProc lpfn, IntPtr hMod, uint dwThreadId);
 
@@ -264,10 +246,11 @@ namespace AfterburnerDataHandler.HotkeysHandler
                 KBDLLHOOKSTRUCT keyboardData = hookData.keyData;
 
                 Keys newKeys = (Keys)keyboardData.vkCode;
-                Keys newModifierKeys = GetModifierKeys(newKeys);
+                Keys newModifierKeys = HotkeyUtils.GetModifierKeys(newKeys);
 
                 if (keyState == KeyboardMessageType.WM_KEYDOWN || keyState == KeyboardMessageType.WM_SYSKEYDOWN)
                 {
+                    Console.WriteLine(HotkeyUtils.GetKeyName(newKeys));
                     pressedModifierKeys |= newModifierKeys;
 
                     if (newKeys != pressedKey)
