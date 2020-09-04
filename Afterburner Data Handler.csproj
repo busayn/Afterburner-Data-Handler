@@ -336,23 +336,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
-    <None Include="Resources\Graphics\bug.png" />
+    <None Include="Resources\Graphics\Bug.png" />
     <None Include="Resources\Graphics\LoggerIcon.png" />
-    <None Include="Resources\Graphics\Folder.png" />
     <Content Include="Resources\Graphics\MADSIcon.ico" />
-    <Content Include="Resources\Graphics\arrowDown.png" />
-    <Content Include="Resources\Graphics\arrowUp.png" />
-    <Content Include="Resources\Graphics\copy.png" />
-    <None Include="Resources\Graphics\play.png" />
-    <None Include="Resources\Graphics\openFile.png" />
+    <Content Include="Resources\Graphics\ArrowDown.png" />
+    <Content Include="Resources\Graphics\ArrowUp.png" />
+    <Content Include="Resources\Graphics\Copy.png" />
+    <None Include="Resources\Graphics\Play.png" />
+    <None Include="Resources\Graphics\OpenFile.png" />
     <None Include="Resources\Graphics\MainScreenIcon.png" />
     <None Include="Resources\Graphics\RemoteIcon.png" />
-    <Content Include="Resources\Graphics\remove.png" />
-    <None Include="Resources\Graphics\saveFile.png" />
+    <Content Include="Resources\Graphics\Remove.png" />
+    <None Include="Resources\Graphics\SaveFile.png" />
     <None Include="Resources\Graphics\SerialIcon.png" />
     <None Include="Resources\Graphics\StatisticIcon.png" />
     <None Include="Resources\Graphics\SettingsIcon.png" />
-    <Content Include="Resources\Graphics\stop.png" />
+    <Content Include="Resources\Graphics\Stop.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
