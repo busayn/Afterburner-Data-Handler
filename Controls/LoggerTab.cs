@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using AfterburnerDataHandler.FlatControls;
+using AfterburnerDataHandler.HotkeysHandler;
 using AfterburnerDataHandler.Projects;
 using AfterburnerDataHandler.Servers.Logger;
 using AfterburnerDataHandler.SharedMemory.Afterburner;
@@ -58,7 +59,19 @@ namespace AfterburnerDataHandler.Controls
             }
         }
 
+        public Hotkey StartLogHotkey
+        {
+            get
+            {
+                if (startLogHotkey == null)
+                    startLogHotkey = new Hotkey(Properties.Settings.Default.Logger_LogHotkey);
+
+                return startLogHotkey;
+            }
+        }
+
         private LoggerServer server;
+        private Hotkey startLogHotkey;
 
         public LoggerTab()
         {
@@ -136,10 +149,12 @@ namespace AfterburnerDataHandler.Controls
                     || Server.ServerState == Servers.ServerState.Stop)
                 {
                     this.StartLogButton.Enabled = false;
+                    StartLogHotkey.Disable();
                 }
                 else
                 {
                     this.StartLogButton.Enabled = true;
+                    StartLogHotkey.Enable();
                 }
             });
 
@@ -214,10 +229,16 @@ namespace AfterburnerDataHandler.Controls
                     Server.Settings = newProject;
             };
 
+
             LogNameField.Leave += (object sender, EventArgs e) =>
             {
                 Server.LogName = LogWriter.CreateLogFolderName(LogNameField.Text);
                 UpdateValues();
+            };
+
+            EditDataButton.Click += (object sender, EventArgs e) =>
+            {
+                MainForm.ShowControl(CreateLogDataEditor());
             };
 
             FrametimeModeToggle.Click += (object sender, EventArgs e) =>
@@ -236,19 +257,22 @@ namespace AfterburnerDataHandler.Controls
             UpdateIntervalField.AddButton.Click += updateIntervalFieldHandler;
             UpdateIntervalField.SubtractButton.Click += updateIntervalFieldHandler;
 
-            EditDataButton.Click += (object sender, EventArgs e) =>
+            Properties.Settings.Default.PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
             {
-                MainForm.ShowControl(CreateLogDataEditor());
+                if (e.PropertyName == "Logger_LogHotkey")
+                {
+                    StartLogHotkey.Key = Properties.Settings.Default.Logger_LogHotkey & ~Keys.Modifiers;
+                    StartLogHotkey.Modifiers = Properties.Settings.Default.Logger_LogHotkey & Keys.Modifiers;
+                }
             };
 
-            Server.Settings.ParameterChanged += (object sender, EventArgs e) =>
+            StartLogHotkey.HotkeyPressed += (object sender, EventArgs e) =>
             {
-                string editLabel = "*";
-
-                if (string.IsNullOrEmpty(this.ParametersHeader.Text) == false &&
-                    this.ParametersHeader.Text.StartsWith(editLabel) == false)
+                if (Server.Settings.UseFrametimeMode == true && Server.ServerState == Servers.ServerState.Connected ||
+                    Server.Settings.UseFrametimeMode == false && Server.ServerState == Servers.ServerState.Begin)
                 {
-                    this.ParametersHeader.Text = this.ParametersHeader.Text.Insert(0, editLabel);
+                    if (Server.LogState == Servers.ServerState.Begin) Server.StopLog();
+                    else Server.BeginLog();
                 }
             };
         }

@@ -21,6 +21,12 @@ namespace AfterburnerDataHandler.HotkeysHandler
         private Keys modifiers;
         private int hotkeySuspendCount = 0;
 
+        public Hotkey(Keys keys)
+        {
+            this.Key = keys & ~Keys.Modifiers;
+            this.Modifiers = keys & Keys.Modifiers;
+        }
+
         public Hotkey(Keys key, Keys modifiers)
         {
             this.Key = key;
@@ -273,6 +279,8 @@ namespace AfterburnerDataHandler.HotkeysHandler
 
         private static void HandleHotkeys(Keys key)
         {
+            if (key == Keys.None) return;
+
             foreach (Hotkey hotkey in activeHotkeys)
             {
                 if (hotkey.Key == key && hotkey.Modifiers == pressedModifierKeys)
