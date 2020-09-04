@@ -181,10 +181,10 @@ namespace AfterburnerDataHandler.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Logger_LogHotkey {
+        [global::System.Configuration.DefaultSettingValueAttribute("None")]
+        public global::System.Windows.Forms.Keys Logger_LogHotkey {
             get {
-                return ((string)(this["Logger_LogHotkey"]));
+                return ((global::System.Windows.Forms.Keys)(this["Logger_LogHotkey"]));
             }
             set {
                 this["Logger_LogHotkey"] = value;

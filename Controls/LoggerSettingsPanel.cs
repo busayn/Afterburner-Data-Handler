@@ -30,7 +30,7 @@ namespace AfterburnerDataHandler.Controls
         public InputField LogPathField { get; protected set; }
         public PropertyContainer LogPathProperty { get; protected set; }
 
-        public InputField LogHotkeyField { get; protected set; }
+        public HotkeysInputField LogHotkeyField { get; protected set; }
         public PropertyContainer LogHotkeyProperty { get; protected set; }
 
         private readonly List<string> targetProperties = new List<string>
@@ -92,8 +92,9 @@ namespace AfterburnerDataHandler.Controls
 
             LogHotkeyField.Leave += (object sender, EventArgs e) =>
             {
-                Properties.Settings.Default.Logger_LogHotkey = LogHotkeyField.Text;
+                Properties.Settings.Default.Logger_LogHotkey = LogHotkeyField.Hotkeys;
                 Properties.Settings.Default.Save();
+                Console.WriteLine(LogHotkeyField.Hotkeys);
             };
         }
 
@@ -104,7 +105,7 @@ namespace AfterburnerDataHandler.Controls
             ServerNotificationsToggle.Checked = Properties.Settings.Default.Logger_ServerNotifications;
             LoggingNotificationsToggle.Checked = Properties.Settings.Default.Logger_LoggingNotifications;
             LogPathField.Text = Properties.Settings.Default.Logger_LogPath;
-            LogHotkeyField.Text = Properties.Settings.Default.Logger_LogHotkey;
+            LogHotkeyField.Hotkeys = Properties.Settings.Default.Logger_LogHotkey;
         }
 
         protected virtual void InitializeGUI()
@@ -200,7 +201,7 @@ namespace AfterburnerDataHandler.Controls
             };
             this.Controls.Add(LogHotkeyProperty);
 
-            this.LogHotkeyField = new InputField
+            this.LogHotkeyField = new HotkeysInputField
             {
 
             };

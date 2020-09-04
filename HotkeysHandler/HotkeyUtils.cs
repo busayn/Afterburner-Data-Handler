@@ -136,7 +136,7 @@ namespace AfterburnerDataHandler.HotkeysHandler
             return key.ToString();
         }
 
-        [DllImport("user32.dll", CharSet = CharSet.Ansi)]
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         static extern uint MapVirtualKey(uint uCode, uint uMapType);
     }
 }

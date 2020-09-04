@@ -151,6 +151,9 @@
     <Compile Include="Controls\GrowLabel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\HotkeysInputField.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\MASMFormattingItemEditor.cs">
       <SubType>Component</SubType>
     </Compile>

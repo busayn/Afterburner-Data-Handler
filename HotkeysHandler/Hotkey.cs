@@ -55,18 +55,23 @@ namespace AfterburnerDataHandler.HotkeysHandler
             }
         }
 
-        public override string ToString()
+        public static string GetHotkeyName(Keys key, Keys modifiers)
         {
             string hotkeyName = string.Empty;
-            Keys keyModifiers = HotkeyUtils.GetModifierKeys(Modifiers);
+            Keys keyModifiers = HotkeyUtils.GetModifierKeys(modifiers);
 
             if ((keyModifiers & Keys.Control) == Keys.Control) hotkeyName += "Ctrl + ";
             if ((keyModifiers & Keys.Alt) == Keys.Alt) hotkeyName += "Alt + ";
             if ((keyModifiers & Keys.Shift) == Keys.Shift) hotkeyName += "Shift + ";
 
-            hotkeyName += HotkeyUtils.GetKeyName(Key & ~HotkeyUtils.modifierKeysMask);
+            hotkeyName += HotkeyUtils.GetKeyName(key & ~HotkeyUtils.modifierKeysMask);
 
             return hotkeyName;
+        }
+
+        public override string ToString()
+        {
+            return GetHotkeyName(Key, Modifiers);
         }
 
         protected virtual void OnHotkeyPressed(EventArgs e)
@@ -250,7 +255,6 @@ namespace AfterburnerDataHandler.HotkeysHandler
 
                 if (keyState == KeyboardMessageType.WM_KEYDOWN || keyState == KeyboardMessageType.WM_SYSKEYDOWN)
                 {
-                    Console.WriteLine(HotkeyUtils.GetKeyName(newKeys));
                     pressedModifierKeys |= newModifierKeys;
 
                     if (newKeys != pressedKey)
