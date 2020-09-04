@@ -328,8 +328,8 @@ namespace AfterburnerDataHandler.FlatControls
             NativeMethods.KBDLLHOOKSTRUCT messageData = Marshal.PtrToStructure<NativeMethods.KBDLLHOOKSTRUCT>(lParam);
 
             if (code >= 0 &&
-                messageType == NativeMethods.KeyboardMessageType.WM_KEYDOWN ||
-                messageType == NativeMethods.KeyboardMessageType.WM_SYSKEYDOWN)
+                (messageType == NativeMethods.KeyboardMessageType.WM_KEYDOWN ||
+                messageType == NativeMethods.KeyboardMessageType.WM_SYSKEYDOWN))
             {
                 IntPtr cancelMassege = new IntPtr(-1);
 
@@ -358,7 +358,7 @@ namespace AfterburnerDataHandler.FlatControls
                 }
             }
 
-            return NativeMethods.CallNextHookEx(mouseHook, code, wParam, lParam);
+            return NativeMethods.CallNextHookEx(keyboardHook, code, wParam, lParam);
         }
 
         protected override void OnPaintBackground(PaintEventArgs pevent)
