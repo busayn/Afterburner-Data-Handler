@@ -48,9 +48,8 @@ namespace AfterburnerDataHandler.Servers.Logger
                 byte[] data = Encoding.UTF8.GetBytes(text);
                 stream.Write(data, 0, data.Length);
             }
-            catch (Exception e)
+            catch
             {
-                Console.WriteLine(e);
                 return false;
             }
 

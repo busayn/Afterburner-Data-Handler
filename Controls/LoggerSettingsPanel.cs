@@ -94,7 +94,6 @@ namespace AfterburnerDataHandler.Controls
             {
                 Properties.Settings.Default.Logger_LogHotkey = LogHotkeyField.Hotkeys;
                 Properties.Settings.Default.Save();
-                Console.WriteLine(LogHotkeyField.Hotkeys);
             };
         }
 

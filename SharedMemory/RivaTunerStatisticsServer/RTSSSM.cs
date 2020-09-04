@@ -29,7 +29,10 @@ namespace AfterburnerDataHandler.SharedMemory.RivaTunerStatisticsServer
                 rtssMappedFile = MemoryMappedFile.OpenExisting(mapName, MemoryMappedFileRights.ReadWrite);
                 rtssStream = rtssMappedFile.CreateViewStream();
             }
-            catch (Exception e) { Console.WriteLine(e); serverState = false; }
+            catch
+            {
+                serverState = false;
+            }
 
             return serverState;
         }
@@ -155,7 +158,7 @@ namespace AfterburnerDataHandler.SharedMemory.RivaTunerStatisticsServer
                     }
                 }
             }
-            catch (Exception e) { Console.WriteLine(e); }
+            catch { }
 
             return this;
         }
@@ -176,7 +179,7 @@ namespace AfterburnerDataHandler.SharedMemory.RivaTunerStatisticsServer
                 rtssStream?.Dispose();
                 rtssMappedFile?.Dispose();
             }
-            catch (Exception e) { Console.WriteLine(e); }
+            catch { }
         }
 
         public static RTSS_SHARED_MEMORY_OSD_ENTRY GetOSDEntry(uint osdID, string mapName = "RTSSSharedMemoryV2")
@@ -253,7 +256,7 @@ namespace AfterburnerDataHandler.SharedMemory.RivaTunerStatisticsServer
                     }
                 }
             }
-            catch (Exception e) { Console.WriteLine(e.Message); }
+            catch { }
 
             return osd;
         }
@@ -352,7 +355,7 @@ namespace AfterburnerDataHandler.SharedMemory.RivaTunerStatisticsServer
                     }
                 }
             }
-            catch (Exception e) { Console.WriteLine(e.Message); }
+            catch { }
 
             return app;
         }

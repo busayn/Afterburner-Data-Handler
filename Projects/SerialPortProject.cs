@@ -156,7 +156,6 @@ namespace AfterburnerDataHandler.Projects
 
         private void DataFormatterChanged(object sender, EventArgs e)
         {
-            Console.WriteLine("DataFormatterChanged");
             IsDirty = true;
         }
     }
