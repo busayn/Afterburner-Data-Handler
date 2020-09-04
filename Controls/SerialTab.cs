@@ -230,7 +230,7 @@ namespace AfterburnerDataHandler.Controls
 
             LoadServerSettingsButton.Click += (object sender, EventArgs e) =>
             {
-                SerialPortProject newProject = null;
+                SerialPortProject newProject = Server.Settings;
                 string projectPath = ProjectsUtils.ShowOpenProjectDialog(ref newProject);
 
                 if (projectPath != null)

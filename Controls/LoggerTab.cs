@@ -216,7 +216,7 @@ namespace AfterburnerDataHandler.Controls
 
             LoadServerSettingsButton.Click += (object sender, EventArgs e) =>
             {
-                LoggerProject newProject = null;
+                LoggerProject newProject = Server.Settings;
                 string projectPath = ProjectsUtils.ShowOpenProjectDialog(ref newProject);
 
                 if (projectPath != null)
