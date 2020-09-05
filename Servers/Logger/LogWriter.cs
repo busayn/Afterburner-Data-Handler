@@ -71,16 +71,25 @@ namespace AfterburnerDataHandler.Servers.Logger
         {
             try
             {
-                LogName = CreateLogFolderName(name);
-                LogDirectoryPath = Path.Combine(directory, LogName);
-                string fileName = string.Format("{0} {1}.{2}", LogName, DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), extension);
-                LogFilePath = Path.Combine(LogDirectoryPath, fileName);
+                string targetDirectory = Path.GetFullPath(directory);
+                string targetName = CreateLogFolderName(name);
+                string targetExtension = string.IsNullOrWhiteSpace(extension) ? "txt" : extension;
 
-                if (File.Exists(LogFilePath))
+                if (Path.IsPathRooted(targetDirectory) == false) return false;
+
+                string newLogDirectoryPath = Path.Combine(targetDirectory, targetName);
+                string newLogFileName = string.Format("{0} {1}.{2}", targetName, DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), extension);
+                string newLogFilePath = Path.Combine(newLogDirectoryPath, newLogFileName);
+
+                if (File.Exists(newLogFilePath))
                 {
-                    fileName = CreateUniqueFileName(LogFilePath);
-                    LogFilePath = Path.Combine(LogDirectoryPath, fileName);
+                    newLogFileName = CreateUniqueFileName(newLogFilePath);
+                    newLogFilePath = Path.Combine(newLogDirectoryPath, newLogFileName);
                 }
+
+                LogDirectoryPath = newLogDirectoryPath;
+                LogName = newLogFileName;
+                LogFilePath = newLogFilePath;
             }
             catch { return false; }
 
@@ -89,19 +98,23 @@ namespace AfterburnerDataHandler.Servers.Logger
 
         public static string CreateLogFolderName(string name)
         {
-            if (string.IsNullOrEmpty(name) != true)
+            try
             {
-                foreach (char c in Path.GetInvalidFileNameChars())
+                if (string.IsNullOrWhiteSpace(name) != true)
                 {
-                    name = name.Replace(c.ToString(), "");
+                    foreach (char c in Path.GetInvalidFileNameChars())
+                    {
+                        name = name.Replace(c.ToString(), "");
+                    }
+
+                    name = Path.GetFileName(name);
+
+                    if (name.Length > 0) return name;
                 }
-
-                name = Path.GetFileName(name);
-
-                if (name.Length > 0) return name;
             }
+            catch { }
 
-            return "Nameless_Log";
+            return "NamelessLog";
         }
 
         public static bool IsPathValid(string path)

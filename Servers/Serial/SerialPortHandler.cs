@@ -91,10 +91,9 @@ namespace AfterburnerDataHandler.Servers.Serial
             return true;
         }
 
-        public virtual List<string> GetAvailablePorts()
+        public static List<string> GetAvailablePorts()
         {
             List<string> openPorts = new List<string>(SerialPort.GetPortNames());
-
             return openPorts;
         }
 

@@ -190,7 +190,7 @@ namespace AfterburnerDataHandler.Controls
                 if (sender is DropdownInputField)
                 {
                     DropdownInputField dropdown = sender as DropdownInputField;
-                    List<string> availablePorts = Server.Serial.GetAvailablePorts();
+                    List<string> availablePorts = Server.GetAvailablePorts();
 
                     if (availablePorts == null) return;
 
@@ -323,6 +323,22 @@ namespace AfterburnerDataHandler.Controls
                 Server.Settings.DataRequest = DataRequestField.Text;
                 UpdateValues();
             };
+
+            Properties.Settings.Default.PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
+            {
+                switch (e.PropertyName)
+                {
+                    case "SerialPort_PortsWhitelist":
+                        Server.PortWhitelist.Clear();
+                        Server.PortWhitelist.AddRange(SlicePortList(Properties.Settings.Default.SerialPort_PortWhitelist));
+                        break;
+
+                    case "SerialPort_PortsBlacklist":
+                        Server.PortBlacklist.Clear();
+                        Server.PortBlacklist.AddRange(SlicePortList(Properties.Settings.Default.SerialPort_PortBlacklist));
+                        break;
+                }
+            };
         }
 
         public virtual void UpdateValues()
@@ -359,8 +375,8 @@ namespace AfterburnerDataHandler.Controls
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
                 AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                Padding = new Padding(16),
-                AutoScrollOffset = new Point(16, 16),
+                Padding = new Padding(12),
+                AutoScrollOffset = new Point(12, 12),
                 BackgroundSource = Theme.BackgroundSource.Inherit
             };
             this.Controls.Add(MainContainer);
@@ -375,7 +391,7 @@ namespace AfterburnerDataHandler.Controls
                 FitContent = false,
                 ControlsAlignment = HorizontalAlignment.Right,
                 Padding = new Padding(3),
-                Margin = new Padding(0, 0, 0, 6),
+                Margin = new Padding(0, 0, 0, 12),
                 Font = MainForm.HeaderFont
             };
             MainContainer.Controls.Add(ControlPanel);
@@ -749,6 +765,26 @@ namespace AfterburnerDataHandler.Controls
             };
 
             return editor;
+        }
+
+        protected virtual List<string> SlicePortList(string portListString)
+        {
+            List<string> ports = new List<string>();
+
+            if (string.IsNullOrWhiteSpace(portListString))
+                return ports;
+
+            string[] portNames = portListString.Split(',');
+
+            foreach (string item in portNames)
+            {
+                if (string.IsNullOrWhiteSpace(item) == false)
+                {
+                    ports.Add(item.Trim());
+                }
+            }
+
+            return ports;
         }
     }
 }

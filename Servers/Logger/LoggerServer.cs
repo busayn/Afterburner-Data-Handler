@@ -109,8 +109,8 @@ namespace AfterburnerDataHandler.Servers.Logger
         }
 
 
-        private string logDirectory = "D:\\";
-        private string logName = "TestLog";
+        private string logDirectory = string.Empty;
+        private string logName = string.Empty;
 
         private Timer masmTimer;
         private MASM masmData;

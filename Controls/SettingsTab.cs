@@ -49,7 +49,7 @@ namespace AfterburnerDataHandler.Controls
                 FitContent = false,
                 ControlsAlignment = HorizontalAlignment.Right,
                 Padding = new Padding(3),
-                Margin = new Padding(16, 16, 16, 6),
+                Margin = new Padding(12, 12, 12, 6),
                 MaximumSize = new Size(1200, int.MaxValue),
                 Font = MainForm.HeaderFont
             };
@@ -62,7 +62,7 @@ namespace AfterburnerDataHandler.Controls
                 AutoSize = true,
                 AutoSizeMode = AutoSizeMode.GrowAndShrink,
                 ColumnsLayout = FlexColumnsLayoutEngine.ColumnsLayout.HorizontalGrid,
-                Padding = new Padding(10, 0, 10, 0),
+                Padding = new Padding(6, 0, 6, 0),
                 Margin = new Padding(0),
                 MaximumSize = new Size(1232, int.MaxValue),
                 BackgroundSource = Theme.BackgroundSource.Inherit,

@@ -24,11 +24,11 @@ namespace AfterburnerDataHandler.Controls
         public Toggle ServerNotificationsToggle { get; protected set; }
         public PropertyContainer ServerNotificationsProperty { get; protected set; }
 
-        public InputField PortsWhitelistField { get; protected set; }
-        public PropertyContainer PortsWhitelistProperty { get; protected set; }
+        public InputField PortWhitelistField { get; protected set; }
+        public PropertyContainer PortWhitelistProperty { get; protected set; }
 
-        public InputField PortsBlacklistField { get; protected set; }
-        public PropertyContainer PortsBlacklistProperty { get; protected set; }
+        public InputField PortBlacklistField { get; protected set; }
+        public PropertyContainer PortBlacklistProperty { get; protected set; }
 
         private readonly List<string> targetProperties = new List<string>
         {
@@ -74,15 +74,15 @@ namespace AfterburnerDataHandler.Controls
                 Properties.Settings.Default.Save();
             };
 
-            PortsWhitelistField.Leave += (object sender, EventArgs e) =>
+            PortWhitelistField.Leave += (object sender, EventArgs e) =>
             {
-                Properties.Settings.Default.SerialPort_PortsWhitelist = PortsWhitelistField.Text;
+                Properties.Settings.Default.SerialPort_PortWhitelist = PortWhitelistField.Text;
                 Properties.Settings.Default.Save();
             };
 
-            PortsBlacklistField.Leave += (object sender, EventArgs e) =>
+            PortBlacklistField.Leave += (object sender, EventArgs e) =>
             {
-                Properties.Settings.Default.SerialPort_PortsBlacklist = PortsBlacklistField.Text;
+                Properties.Settings.Default.SerialPort_PortBlacklist = PortBlacklistField.Text;
                 Properties.Settings.Default.Save();
             };
         }
@@ -92,8 +92,8 @@ namespace AfterburnerDataHandler.Controls
             ServerAutorunToggle.Checked = Properties.Settings.Default.SerialPort_Autorun;
             OpenLastProjectToggle.Checked = Properties.Settings.Default.SerialPort_OpenLastProject;
             ServerNotificationsToggle.Checked = Properties.Settings.Default.SerialPort_ServerNotifications;
-            PortsWhitelistField.Text = Properties.Settings.Default.SerialPort_PortsWhitelist;
-            PortsBlacklistField.Text = Properties.Settings.Default.SerialPort_PortsBlacklist;
+            PortWhitelistField.Text = Properties.Settings.Default.SerialPort_PortWhitelist;
+            PortBlacklistField.Text = Properties.Settings.Default.SerialPort_PortBlacklist;
         }
 
         protected virtual void InitializeGUI()
@@ -156,31 +156,31 @@ namespace AfterburnerDataHandler.Controls
             };
             ServerNotificationsProperty.Controls.Add(ServerNotificationsToggle);
 
-            this.PortsWhitelistProperty = new PropertyContainer
+            this.PortWhitelistProperty = new PropertyContainer
             {
-                Text = "Ports Whitelist",
+                Text = "Port Whitelist",
                 Margin = new Padding(6, 0, 6, 0)
             };
-            this.Controls.Add(PortsWhitelistProperty);
+            this.Controls.Add(PortWhitelistProperty);
 
-            this.PortsWhitelistField = new InputField
+            this.PortWhitelistField = new InputField
             {
 
             };
-            PortsWhitelistProperty.Controls.Add(PortsWhitelistField);
+            PortWhitelistProperty.Controls.Add(PortWhitelistField);
 
-            this.PortsBlacklistProperty = new PropertyContainer
+            this.PortBlacklistProperty = new PropertyContainer
             {
-                Text = "Ports Blacklist",
+                Text = "Port Blacklist",
                 Margin = new Padding(6, 0, 6, 0)
             };
-            this.Controls.Add(PortsBlacklistProperty);
+            this.Controls.Add(PortBlacklistProperty);
 
-            this.PortsBlacklistField = new InputField
+            this.PortBlacklistField = new InputField
             {
 
             };
-            PortsBlacklistProperty.Controls.Add(PortsBlacklistField);
+            PortBlacklistProperty.Controls.Add(PortBlacklistField);
         }
     }
 }

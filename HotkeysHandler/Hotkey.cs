@@ -275,7 +275,7 @@ namespace AfterburnerDataHandler.HotkeysHandler
                     pressedModifierKeys &= ~newModifierKeys;
                 }
             }
-        }
+        }                                   
 
         private static void HandleHotkeys(Keys key)
         {

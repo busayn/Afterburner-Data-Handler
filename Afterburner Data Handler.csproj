@@ -157,6 +157,9 @@
     <Compile Include="Controls\MASMFormattingItemEditor.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\PathInputField.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\RemoteTab.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -187,6 +190,7 @@
     <Compile Include="Controls\StatusBar.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Filesystem\FileUtils.cs" />
     <Compile Include="FlatControls\ContentPanel.cs">
       <SubType>Component</SubType>
     </Compile>

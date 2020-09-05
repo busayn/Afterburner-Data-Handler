@@ -47,6 +47,28 @@ namespace AfterburnerDataHandler.Servers.Serial
             }
         }
 
+        public List<string> PortWhitelist
+        {
+            get
+            {
+                if (portWhitelist == null)
+                    portWhitelist = new List<string>();
+
+                return portWhitelist;
+            }
+        }
+
+        public List<string> PortBlacklist
+        {
+            get
+            {
+                if (portBlacklist == null)
+                    portBlacklist = new List<string>();
+
+                return portBlacklist;
+            }
+        }
+
         public SerialPortHandler Serial
         {
             get
@@ -72,6 +94,9 @@ namespace AfterburnerDataHandler.Servers.Serial
         public event EventHandler<EventArgs> SettingsChanged;
 
         private SerialPortProject settings;
+        private List<string> portWhitelist;
+        private List<string> portBlacklist;
+
         private SerialPortHandler serial;
         private MASM masmData;
         private Timer serialPortTimer;
@@ -127,7 +152,7 @@ namespace AfterburnerDataHandler.Servers.Serial
             {
                 if (Settings.AutoConnect == true)
                 {
-                    List<string> availablePorts = Serial.GetAvailablePorts();
+                    List<string> availablePorts = SerialPortHandler.GetAvailablePorts();
 
                     if (availablePorts.Count > 0)
                     {
@@ -230,6 +255,18 @@ namespace AfterburnerDataHandler.Servers.Serial
         protected virtual void OnSettingsChanged(EventArgs e)
         {
             SettingsChanged?.Invoke(this, e);
+        }
+
+        public virtual List<string> GetAvailablePorts()
+        {
+            List<string> ports = SerialPortHandler.GetAvailablePorts()
+                                                  .Except(PortBlacklist)
+                                                  .ToList();
+
+            if (PortWhitelist.Count > 0)
+                ports = ports.Intersect(PortWhitelist).ToList();
+
+            return ports;
         }
     }
 }

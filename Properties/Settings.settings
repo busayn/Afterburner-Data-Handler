@@ -20,10 +20,10 @@
     <Setting Name="SerialPort_ServerNotifications" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="SerialPort_PortsWhitelist" Type="System.String" Scope="User">
+    <Setting Name="SerialPort_PortWhitelist" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="SerialPort_PortsBlacklist" Type="System.String" Scope="User">
+    <Setting Name="SerialPort_PortBlacklist" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="Logger_Autorun" Type="System.Boolean" Scope="User">
@@ -43,6 +43,9 @@
     </Setting>
     <Setting Name="Logger_LogHotkey" Type="System.Windows.Forms.Keys" Scope="User">
       <Value Profile="(Default)">None</Value>
+    </Setting>
+    <Setting Name="Logger_LogName" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

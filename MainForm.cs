@@ -38,7 +38,12 @@ namespace AfterburnerDataHandler
             MainForm.Current = this;
 
             InitializeComponent();
+            InitializeGUI();
+            InitializeServers();
+        }
 
+        protected virtual void InitializeGUI()
+        {
             this.Font = MainFont;
             this.Text = "Afterburner Data Handler";
 
@@ -107,12 +112,24 @@ namespace AfterburnerDataHandler
             //this.MainMenu.Controls.Add(MainTab);
             //this.MainMenu.Controls.Add(StatisticTab);
             //this.MainMenu.Controls.Add(RemoteTab);
+        }
 
-            ProjectsManager.SerialPortServer = SerialTab.Server;
+        protected virtual void InitializeServers()
+        {
             ProjectsManager.LoggerServer = LoggerTab.Server;
+            ProjectsManager.SerialPortServer = SerialTab.Server;
 
-            ProjectsManager.LoadLastSerialPortProject();
-            ProjectsManager.LoadLastLoggerProject();
+            if (Properties.Settings.Default.Logger_OpenLastProject)
+                ProjectsManager.LoadLastLoggerProject();
+
+            if (Properties.Settings.Default.SerialPort_OpenLastProject)
+                ProjectsManager.LoadLastSerialPortProject();
+
+            if (Properties.Settings.Default.Logger_Autorun)
+                ProjectsManager.LoggerServer.Begin();
+
+            if (Properties.Settings.Default.SerialPort_Autorun)
+                ProjectsManager.SerialPortServer.Begin();
         }
 
         public static void ShowControl(Control control)

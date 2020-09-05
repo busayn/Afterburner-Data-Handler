@@ -98,24 +98,24 @@ namespace AfterburnerDataHandler.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string SerialPort_PortsWhitelist {
+        public string SerialPort_PortWhitelist {
             get {
-                return ((string)(this["SerialPort_PortsWhitelist"]));
+                return ((string)(this["SerialPort_PortWhitelist"]));
             }
             set {
-                this["SerialPort_PortsWhitelist"] = value;
+                this["SerialPort_PortWhitelist"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string SerialPort_PortsBlacklist {
+        public string SerialPort_PortBlacklist {
             get {
-                return ((string)(this["SerialPort_PortsBlacklist"]));
+                return ((string)(this["SerialPort_PortBlacklist"]));
             }
             set {
-                this["SerialPort_PortsBlacklist"] = value;
+                this["SerialPort_PortBlacklist"] = value;
             }
         }
         
@@ -188,6 +188,18 @@ namespace AfterburnerDataHandler.Properties {
             }
             set {
                 this["Logger_LogHotkey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Logger_LogName {
+            get {
+                return ((string)(this["Logger_LogName"]));
+            }
+            set {
+                this["Logger_LogName"] = value;
             }
         }
     }

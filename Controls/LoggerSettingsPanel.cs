@@ -27,7 +27,7 @@ namespace AfterburnerDataHandler.Controls
         public Toggle LoggingNotificationsToggle { get; protected set; }
         public PropertyContainer LoggingNotificationsProperty { get; protected set; }
 
-        public InputField LogPathField { get; protected set; }
+        public PathInputField LogPathField { get; protected set; }
         public PropertyContainer LogPathProperty { get; protected set; }
 
         public HotkeysInputField LogHotkeyField { get; protected set; }
@@ -84,11 +84,14 @@ namespace AfterburnerDataHandler.Controls
                 Properties.Settings.Default.Save();
             };
 
-            LogPathField.Leave += (object sender, EventArgs e) =>
+            EventHandler logPathFieldHandler = (object sender, EventArgs e) =>
             {
                 Properties.Settings.Default.Logger_LogPath = LogPathField.Text;
                 Properties.Settings.Default.Save();
             };
+
+            LogPathField.Leave += logPathFieldHandler;
+            LogPathField.SelectedFromDialog += logPathFieldHandler;
 
             LogHotkeyField.Leave += (object sender, EventArgs e) =>
             {
@@ -187,7 +190,7 @@ namespace AfterburnerDataHandler.Controls
             };
             this.Controls.Add(LogPathProperty);
 
-            this.LogPathField = new InputField
+            this.LogPathField = new PathInputField
             {
 
             };

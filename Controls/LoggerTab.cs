@@ -13,6 +13,7 @@ using AfterburnerDataHandler.HotkeysHandler;
 using AfterburnerDataHandler.Projects;
 using AfterburnerDataHandler.Servers.Logger;
 using AfterburnerDataHandler.SharedMemory.Afterburner;
+using AfterburnerDataHandler.Filesystem;
 
 namespace AfterburnerDataHandler.Controls
 {
@@ -32,13 +33,17 @@ namespace AfterburnerDataHandler.Controls
         public FlatButton SaveServerSettingsButton { get; protected set; }
         public FlatButton LoadServerSettingsButton { get; protected set; }
 
+        // Log Name Property
+        public InputField LogNameField { get; protected set; }
+        public PropertyContainer LogNameProperty { get; protected set; }
+
         // Edit Data Property
         public FlatButton EditDataButton { get; protected set; }
         public PropertyContainer EditDataProperty { get; protected set; }
 
         // Log Name Property
-        public InputField LogNameField { get; protected set; }
-        public PropertyContainer LogNameProperty { get; protected set; }
+        public InputField LogFileFormatField { get; protected set; }
+        public PropertyContainer LogFileFormatProperty { get; protected set; }
 
         // Update Interval Property
         public NumericInputField UpdateIntervalField { get; protected set; }
@@ -153,6 +158,8 @@ namespace AfterburnerDataHandler.Controls
                 }
                 else
                 {
+                    Server.LogDirectory = Properties.Settings.Default.Logger_LogPath;
+                    Server.LogName = Properties.Settings.Default.Logger_LogName;
                     this.StartLogButton.Enabled = true;
                     StartLogHotkey.Enable();
                 }
@@ -232,13 +239,28 @@ namespace AfterburnerDataHandler.Controls
 
             LogNameField.Leave += (object sender, EventArgs e) =>
             {
-                Server.LogName = LogWriter.CreateLogFolderName(LogNameField.Text);
+                string newFileName = FileUtils.CreateCorrectFileName(LogNameField.Text);
+
+                newFileName = string.IsNullOrWhiteSpace(newFileName) ? "NamelessLog" : newFileName;
+                Properties.Settings.Default.Logger_LogName = newFileName;
+                Properties.Settings.Default.Save();
+
                 UpdateValues();
             };
 
             EditDataButton.Click += (object sender, EventArgs e) =>
             {
                 MainForm.ShowControl(CreateLogDataEditor());
+            };
+
+            LogFileFormatField.Leave += (object sender, EventArgs e) =>
+            {
+                string newFileFormat = FileUtils.CreateCorrectFileName(LogFileFormatField.Text);
+
+                newFileFormat = string.IsNullOrWhiteSpace(newFileFormat) ? "txt" : newFileFormat;
+                Server.Settings.LogFileFormat = newFileFormat;
+
+                UpdateValues();
             };
 
             FrametimeModeToggle.Click += (object sender, EventArgs e) =>
@@ -259,10 +281,12 @@ namespace AfterburnerDataHandler.Controls
 
             Properties.Settings.Default.PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
             {
-                if (e.PropertyName == "Logger_LogHotkey")
+                switch (e.PropertyName)
                 {
-                    StartLogHotkey.Key = Properties.Settings.Default.Logger_LogHotkey & ~Keys.Modifiers;
-                    StartLogHotkey.Modifiers = Properties.Settings.Default.Logger_LogHotkey & Keys.Modifiers;
+                    case "Logger_LogHotkey":
+                        StartLogHotkey.Key = Properties.Settings.Default.Logger_LogHotkey & ~Keys.Modifiers;
+                        StartLogHotkey.Modifiers = Properties.Settings.Default.Logger_LogHotkey & Keys.Modifiers;
+                        break;
                 }
             };
 
@@ -271,8 +295,16 @@ namespace AfterburnerDataHandler.Controls
                 if (Server.Settings.UseFrametimeMode == true && Server.ServerState == Servers.ServerState.Connected ||
                     Server.Settings.UseFrametimeMode == false && Server.ServerState == Servers.ServerState.Begin)
                 {
-                    if (Server.LogState == Servers.ServerState.Begin) Server.StopLog();
-                    else Server.BeginLog();
+                    if (Server.LogState == Servers.ServerState.Begin)
+                    {
+                        Server.StopLog();
+                    }
+                    else
+                    {
+                        Server.LogDirectory = Properties.Settings.Default.Logger_LogPath;
+                        Server.LogName = Properties.Settings.Default.Logger_LogName;
+                        Server.BeginLog();
+                    }
                 }
             };
         }
@@ -283,7 +315,8 @@ namespace AfterburnerDataHandler.Controls
                 ? "*" + Server.Settings.ProjectName
                 : Server.Settings.ProjectName;
 
-            LogNameField.Text = Server.LogName;
+            LogNameField.Text = Properties.Settings.Default.Logger_LogName;
+            LogFileFormatField.Text = Server.Settings.LogFileFormat;
             UpdateIntervalField.Value = Server.Settings.DataUpdateInterval;
             FrametimeModeToggle.Checked = Server.Settings.UseFrametimeMode;
         }
@@ -295,8 +328,8 @@ namespace AfterburnerDataHandler.Controls
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
                 AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                Padding = new Padding(16),
-                AutoScrollOffset = new Point(16, 16),
+                Padding = new Padding(12),
+                AutoScrollOffset = new Point(12, 12),
                 BackgroundSource = Theme.BackgroundSource.Inherit
             };
             this.Controls.Add(MainContainer);
@@ -311,7 +344,7 @@ namespace AfterburnerDataHandler.Controls
                 FitContent = false,
                 ControlsAlignment = HorizontalAlignment.Right,
                 Padding = new Padding(3),
-                Margin = new Padding(0, 0, 0, 6),
+                Margin = new Padding(0, 0, 0, 12),
                 Font = MainForm.HeaderFont
             };
             MainContainer.Controls.Add(ControlPanel);
@@ -437,6 +470,20 @@ namespace AfterburnerDataHandler.Controls
                 Text = "Edit"
             };
             EditDataProperty.Controls.Add(EditDataButton);
+
+            // Log File Format Property
+            this.LogFileFormatProperty = new PropertyContainer
+            {
+                Text = "Log File Format",
+                Margin = new Padding(8, 1, 8, 1)
+            };
+            ParametersContainer.Controls.Add(LogFileFormatProperty);
+
+            this.LogFileFormatField = new InputField
+            {
+
+            };
+            LogFileFormatProperty.Controls.Add(LogFileFormatField);
 
             // Update Interval Property
             this.UpdateIntervalProperty = new PropertyContainer
