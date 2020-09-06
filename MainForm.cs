@@ -40,6 +40,11 @@ namespace AfterburnerDataHandler
 
             InitializeComponent();
             InitializeGUI();
+
+            AppendMessage("2.0","Version", false);
+            AppendMessage("Edward Shein (MenY)", "Author", false);
+            AppendMessage("https://github.com/busayn/Afterburner-Data-Handler", "More Info", false);
+
             InitializeServers();
         }
 
@@ -74,7 +79,7 @@ namespace AfterburnerDataHandler
                 UseSelectionMark = true,
                 SelectionMarkSize = 4,
                 LabelPadding = new Padding(8, 8, 4, 8),
-                TabsBarPadding = new Padding(0, 8, 0, 0),
+                TabsBarPadding = new Padding(0, 12, 0, 0),
                 TabsBarFont = SidebarFont,
             };
 

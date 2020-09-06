@@ -141,6 +141,8 @@ namespace AfterburnerDataHandler.Controls
                         Font = new Font("Consolas", 10),
                     };
                     this.Controls.Add(messageList);
+
+                    messageList.LinkClicked += MessageListLinkClicked;
                 }
                 return messageList;
             }
@@ -354,6 +356,15 @@ namespace AfterburnerDataHandler.Controls
             ExpandButtonHighlighted = false;
 
             this.Invalidate();
+        }
+
+        private void MessageListLinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(e.LinkText);
+            }
+            catch { }
         }
     }
 }
