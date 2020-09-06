@@ -186,7 +186,7 @@ namespace AfterburnerDataHandler.Servers.Logger
             try
             {
                 targetLogName = Settings.UseFrametimeMode == true
-                    ? Path.GetFileNameWithoutExtension(LogServer.LogDirectoryPath)
+                    ? Path.GetFileNameWithoutExtension(FrametimeServer.ConnectedApp)
                     : LogName;
             }
             catch { }
