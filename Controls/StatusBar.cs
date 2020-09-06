@@ -211,7 +211,7 @@ namespace AfterburnerDataHandler.Controls
                     text = message ?? string.Empty;
 
                 MessageList.AppendText(text);
-                ControlUtils.ScrollToTop(MessageList);
+                ControlUtils.ScrollToBottom(MessageList);
                 this.Invalidate();
             });
         }
