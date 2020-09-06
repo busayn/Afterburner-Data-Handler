@@ -20,7 +20,6 @@ namespace AfterburnerDataHandler
     {
         public static MainForm Current { get; set; }
 
-        public Controls.StatusBar StatusBar { get; protected set; }
         public TabView MainMenu { get; protected set; }
         public MainTab MainTab { get; protected set; }
         public SerialTab SerialTab { get; protected set; }
@@ -28,6 +27,7 @@ namespace AfterburnerDataHandler
         public StatisticTab StatisticTab { get; protected set; }
         public RemoteTab RemoteTab { get; protected set; }
         public SettingsTab SettingsTab { get; protected set; }
+        public Controls.StatusBar StatusBar { get; protected set; }
 
         public static Font MainFont = new Font("Segoe UI Semibold", 9, FontStyle.Regular, GraphicsUnit.Point);
         public static Font SidebarFont = new Font("Segoe UI Semibold", 11, FontStyle.Regular, GraphicsUnit.Point);
@@ -49,8 +49,7 @@ namespace AfterburnerDataHandler
 
             this.StatusBar = new Controls.StatusBar
             {
-                Dock = DockStyle.Bottom,
-                Text = "[12:54:31][Logger] Connected to Starfall"
+                Dock = DockStyle.Bottom
             };
 
             this.MainMenu = new TabView
@@ -120,10 +119,34 @@ namespace AfterburnerDataHandler
             ProjectsManager.SerialPortServer = SerialTab.Server;
 
             if (Properties.Settings.Default.Logger_OpenLastProject)
-                ProjectsManager.LoadLastLoggerProject();
+            {
+                if (ProjectsManager.LoadLastLoggerProject())
+                {
+                    AppendMessage(
+                        string.Format("Loaded from \"{0}\"", Properties.Settings.Default.Logger_LastProject),
+                        "Logger");
+                }
+                else
+                {
+                    Properties.Settings.Default.Logger_LastProject = string.Empty;
+                    Properties.Settings.Default.Save();
+                }
+            }
 
             if (Properties.Settings.Default.SerialPort_OpenLastProject)
-                ProjectsManager.LoadLastSerialPortProject();
+            {
+                if (ProjectsManager.LoadLastSerialPortProject())
+                {
+                    AppendMessage(
+                    string.Format("Loaded from \"{0}\"", Properties.Settings.Default.SerialPort_LastProject),
+                    "SerialPort");
+                }
+                else
+                {
+                    Properties.Settings.Default.SerialPort_LastProject = string.Empty;
+                    Properties.Settings.Default.Save();
+                }
+            }
 
             if (Properties.Settings.Default.Logger_Autorun)
                 ProjectsManager.LoggerServer.Begin();
@@ -138,6 +161,20 @@ namespace AfterburnerDataHandler
 
             MainForm.Current?.Controls?.Add(control);
             control.BringToFront();
+        }
+
+        public static bool AppendMessage(string message) { return AppendMessage(message, string.Empty, true); }
+
+        public static bool AppendMessage(string message, string label) { return AppendMessage(message, label, true); }
+
+        public static bool AppendMessage(string message, string label, bool showTime)
+        {
+            if (Current == null)
+                return false;
+
+            Current.StatusBar.AppendMessage(message, label, showTime);
+
+            return true;
         }
 
         protected override void OnResizeBegin(EventArgs e)

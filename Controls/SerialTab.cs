@@ -136,9 +136,12 @@ namespace AfterburnerDataHandler.Controls
 
         private void ServerStateChanged(object sender, Servers.ServerStateEventArgs e)
         {
+            string messageLabel = "Serial Port";
+
             switch (e.state)
             {
                 case Servers.ServerState.Begin:
+                    MainForm.AppendMessage("Server started", messageLabel);
                     ControlUtils.AsyncSafeInvoke(this, () =>
                     {
                         this.StartServerButton.Text = "Stop Server";
@@ -149,19 +152,22 @@ namespace AfterburnerDataHandler.Controls
                     break;
 
                 case Servers.ServerState.Waiting:
+                    MainForm.AppendMessage("Waiting for connection...", messageLabel);
                     break;
 
                 case Servers.ServerState.Connected:
-                    ControlUtils.AsyncSafeInvoke(this, () =>
-                    {
-                        Console.WriteLine(Server.OpenPort);
-                    });
+                    if (string.IsNullOrWhiteSpace(Server.OpenPort))
+                        MainForm.AppendMessage("Connected", messageLabel);
+                    else
+                        MainForm.AppendMessage("Connected to " + Server.OpenPort, messageLabel);
                     break;
 
                 case Servers.ServerState.Reconnect:
+                    MainForm.AppendMessage("Reconnecting", messageLabel);
                     break;
 
                 case Servers.ServerState.Stop:
+                    MainForm.AppendMessage("Server stopped", messageLabel);
                     ControlUtils.AsyncSafeInvoke(this, () =>
                     {
                         this.StartServerButton.Text = "Start Server";
@@ -171,8 +177,6 @@ namespace AfterburnerDataHandler.Controls
                     });
                     break;
             }
-
-            Console.WriteLine("[Server State] " + e.state);
         }
 
         protected virtual void InitializeHandles()

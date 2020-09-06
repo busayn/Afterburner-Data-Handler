@@ -11,8 +11,12 @@ using System.IO;
 
 namespace AfterburnerDataHandler.Controls
 {
-    class ControlUtils
+    public static class ControlUtils
     {
+        private const int WM_VSCROLL = 0x115;
+        private const int SB_TOP = 6;
+        private const int SB_BOTTOM = 7;
+
         public static void DisableComboBoxScroll(ComboBox comboBox)
         {
             if (comboBox != null)
@@ -33,5 +37,27 @@ namespace AfterburnerDataHandler.Controls
 
             return invokeRequired;
         }
+
+        public static void ScrollToTop(Control control)
+        {
+            if (control != null && control.IsHandleCreated == true)
+            {
+                SendMessage(control.Handle, WM_VSCROLL, SB_TOP, 0);
+            }
+        }
+
+        public static void ScrollToBottom(Control control)
+        {
+            if (control != null && control.IsHandleCreated == true)
+            {
+                SendMessage(control.Handle, WM_VSCROLL, SB_BOTTOM, 0);
+            }
+        }
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
     }
 }

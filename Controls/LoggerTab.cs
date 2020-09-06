@@ -113,9 +113,12 @@ namespace AfterburnerDataHandler.Controls
 
         private void ServerStateChanged(object sender, Servers.ServerStateEventArgs e)
         {
+            string messageLabel = "Logger";
+
             switch (e.state)
             {
                 case Servers.ServerState.Begin:
+                    MainForm.AppendMessage("Server started", messageLabel);
                     ControlUtils.AsyncSafeInvoke(this, () =>
                     {
                         this.StartServerButton.Text = "Stop Server";
@@ -125,19 +128,39 @@ namespace AfterburnerDataHandler.Controls
                     break;
 
                 case Servers.ServerState.Waiting:
+                    MainForm.AppendMessage("Waiting app...", messageLabel);
                     break;
 
                 case Servers.ServerState.Connected:
-                    ControlUtils.AsyncSafeInvoke(this, () =>
+                    string message = string.Empty;
+
+                    if (Server.Settings.UseFrametimeMode == true)
                     {
-                        Console.WriteLine("[Server State] Connected to " + Path.GetFileNameWithoutExtension(Server.FrametimeServer.ConnectedApp));
-                    });
+                        message = "Connected to ";
+
+                        try
+                        {
+                            message += Path.GetFileNameWithoutExtension(Server.FrametimeServer.ConnectedApp);
+                        }
+                        catch
+                        {
+                            message += Server.FrametimeServer.ConnectedApp ?? string.Empty;
+                        }
+                    }
+                    else
+                    {
+                        message = "Connected";
+                    }
+
+                    MainForm.AppendMessage(message, messageLabel);
                     break;
 
                 case Servers.ServerState.Reconnect:
+                    MainForm.AppendMessage("Reconnect to app", messageLabel);
                     break;
 
                 case Servers.ServerState.Stop:
+                    MainForm.AppendMessage("Server stopped", messageLabel);
                     ControlUtils.AsyncSafeInvoke(this, () =>
                     {
                         this.StartServerButton.Text = "Start Server";
@@ -164,15 +187,16 @@ namespace AfterburnerDataHandler.Controls
                     StartLogHotkey.Enable();
                 }
             });
-
-            Console.WriteLine("[Server State] " + e.state);
         }
 
         private void LogStateChanged(object sender, Servers.ServerStateEventArgs e)
         {
+            string messageLabel = "Logger";
+
             switch (e.state)
             {
                 case Servers.ServerState.Begin:
+                    MainForm.AppendMessage("Log Started", messageLabel);
                     ControlUtils.AsyncSafeInvoke(this, () =>
                     {
                         this.StartLogButton.Text = "Stop Log";
@@ -181,6 +205,13 @@ namespace AfterburnerDataHandler.Controls
                     break;
 
                 case Servers.ServerState.Stop:
+                    string message = "Log Stopped";
+
+                    if (string.IsNullOrWhiteSpace(Server.LogServer.LogFilePath) == false)
+                        message += string.Format(". Saved to \"{0}\"", Server.LogServer.LogFilePath);
+
+                    MainForm.AppendMessage(message, messageLabel);
+
                     ControlUtils.AsyncSafeInvoke(this, () =>
                     {
                         this.StartLogButton.Text = "Start Log";
@@ -188,8 +219,6 @@ namespace AfterburnerDataHandler.Controls
                     });
                     break;
             }
-
-            Console.WriteLine("[Log State] " + e.state);
         }
 
         protected virtual void InitializeHandles()
