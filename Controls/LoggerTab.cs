@@ -114,11 +114,18 @@ namespace AfterburnerDataHandler.Controls
         private void ServerStateChanged(object sender, Servers.ServerStateEventArgs e)
         {
             string messageLabel = "Logger";
+            string message = string.Empty;
 
             switch (e.state)
             {
                 case Servers.ServerState.Begin:
-                    MainForm.AppendMessage("Server started", messageLabel);
+                    message = "Server started";
+
+                    MainForm.AppendMessage(message, messageLabel);
+
+                    if (Properties.Settings.Default.Logger_ServerNotifications == true)
+                        MainForm.ShowNotification(message, messageLabel);
+
                     ControlUtils.AsyncSafeInvoke(this, () =>
                     {
                         this.StartServerButton.Text = "Stop Server";
@@ -132,7 +139,7 @@ namespace AfterburnerDataHandler.Controls
                     break;
 
                 case Servers.ServerState.Connected:
-                    string message = string.Empty;
+                    message = string.Empty;
 
                     if (Server.Settings.UseFrametimeMode == true)
                     {
@@ -153,14 +160,28 @@ namespace AfterburnerDataHandler.Controls
                     }
 
                     MainForm.AppendMessage(message, messageLabel);
+
+                    if (Properties.Settings.Default.Logger_ServerNotifications == true)
+                        MainForm.ShowNotification(message, messageLabel);
                     break;
 
                 case Servers.ServerState.Reconnect:
-                    MainForm.AppendMessage("Reconnect to app", messageLabel);
+                    message = "Reconnecting";
+
+                    MainForm.AppendMessage(message, messageLabel);
+
+                    if (Properties.Settings.Default.Logger_ServerNotifications == true)
+                        MainForm.ShowNotification(message, messageLabel);
                     break;
 
                 case Servers.ServerState.Stop:
-                    MainForm.AppendMessage("Server stopped", messageLabel);
+                    message = "Server stopped";
+
+                    MainForm.AppendMessage(message, messageLabel);
+
+                    if (Properties.Settings.Default.Logger_ServerNotifications == true)
+                        MainForm.ShowNotification(message, messageLabel);
+
                     ControlUtils.AsyncSafeInvoke(this, () =>
                     {
                         this.StartServerButton.Text = "Start Server";
@@ -192,11 +213,18 @@ namespace AfterburnerDataHandler.Controls
         private void LogStateChanged(object sender, Servers.ServerStateEventArgs e)
         {
             string messageLabel = "Logger";
+            string message = string.Empty;
 
             switch (e.state)
             {
                 case Servers.ServerState.Begin:
+                    message = "Log Started";
+
                     MainForm.AppendMessage("Log Started", messageLabel);
+
+                    if (Properties.Settings.Default.Logger_LoggingNotifications == true)
+                        MainForm.ShowNotification(message, messageLabel);
+
                     ControlUtils.AsyncSafeInvoke(this, () =>
                     {
                         this.StartLogButton.Text = "Stop Log";
@@ -205,12 +233,15 @@ namespace AfterburnerDataHandler.Controls
                     break;
 
                 case Servers.ServerState.Stop:
-                    string message = "Log Stopped";
+                    message = "Log Stopped";
 
                     if (string.IsNullOrWhiteSpace(Server.LogServer.LogFilePath) == false)
                         message += string.Format(". Saved to \"{0}\"", Server.LogServer.LogFilePath);
 
                     MainForm.AppendMessage(message, messageLabel);
+
+                    if (Properties.Settings.Default.Logger_LoggingNotifications == true)
+                        MainForm.ShowNotification(message, messageLabel);
 
                     ControlUtils.AsyncSafeInvoke(this, () =>
                     {

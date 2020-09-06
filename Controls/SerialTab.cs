@@ -137,11 +137,18 @@ namespace AfterburnerDataHandler.Controls
         private void ServerStateChanged(object sender, Servers.ServerStateEventArgs e)
         {
             string messageLabel = "Serial Port";
+            string message = string.Empty;
 
             switch (e.state)
             {
                 case Servers.ServerState.Begin:
-                    MainForm.AppendMessage("Server started", messageLabel);
+                    message = "Server started";
+
+                    if (Properties.Settings.Default.SerialPort_ServerNotifications == true)
+                        MainForm.ShowNotification(message, messageLabel);
+
+                    MainForm.AppendMessage(message, messageLabel);
+
                     ControlUtils.AsyncSafeInvoke(this, () =>
                     {
                         this.StartServerButton.Text = "Stop Server";
@@ -152,22 +159,39 @@ namespace AfterburnerDataHandler.Controls
                     break;
 
                 case Servers.ServerState.Waiting:
-                    MainForm.AppendMessage("Waiting for connection...", messageLabel);
+                    message = "Waiting for connection...";
+                    MainForm.AppendMessage(message, messageLabel);
                     break;
 
                 case Servers.ServerState.Connected:
                     if (string.IsNullOrWhiteSpace(Server.OpenPort))
-                        MainForm.AppendMessage("Connected", messageLabel);
+                        message = "Connected";
                     else
-                        MainForm.AppendMessage("Connected to " + Server.OpenPort, messageLabel);
+                        message = "Connected to " + Server.OpenPort;
+
+                    if (Properties.Settings.Default.SerialPort_ServerNotifications == true)
+                        MainForm.ShowNotification(message, messageLabel);
+
+                    MainForm.AppendMessage(message, messageLabel);
                     break;
 
                 case Servers.ServerState.Reconnect:
-                    MainForm.AppendMessage("Reconnecting", messageLabel);
+                    message = "Reconnecting";
+
+                    if (Properties.Settings.Default.SerialPort_ServerNotifications == true)
+                        MainForm.ShowNotification(message, messageLabel);
+
+                    MainForm.AppendMessage(message, messageLabel);
                     break;
 
                 case Servers.ServerState.Stop:
-                    MainForm.AppendMessage("Server stopped", messageLabel);
+                    message = "Server stopped";
+
+                    if (Properties.Settings.Default.SerialPort_ServerNotifications == true)
+                        MainForm.ShowNotification(message, messageLabel);
+
+                    MainForm.AppendMessage(message, messageLabel);
+                    
                     ControlUtils.AsyncSafeInvoke(this, () =>
                     {
                         this.StartServerButton.Text = "Start Server";

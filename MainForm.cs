@@ -28,6 +28,7 @@ namespace AfterburnerDataHandler
         public RemoteTab RemoteTab { get; protected set; }
         public SettingsTab SettingsTab { get; protected set; }
         public Controls.StatusBar StatusBar { get; protected set; }
+        public NotifyIcon TrayNotifyIcon { get; protected set; }
 
         public static Font MainFont = new Font("Segoe UI Semibold", 9, FontStyle.Regular, GraphicsUnit.Point);
         public static Font SidebarFont = new Font("Segoe UI Semibold", 11, FontStyle.Regular, GraphicsUnit.Point);
@@ -47,10 +48,20 @@ namespace AfterburnerDataHandler
             this.Font = MainFont;
             this.Text = "Afterburner Data Handler";
 
+            this.TrayNotifyIcon = new NotifyIcon
+            {
+                Icon = Properties.Resources.MADSIcon,
+                Visible = true,
+                Text = this.Text,
+            };
+            TrayNotifyIcon.Click += TrayNotifyIconClick;
+
             this.StatusBar = new Controls.StatusBar
             {
                 Dock = DockStyle.Bottom
             };
+            this.Controls.Add(this.StatusBar);
+
 
             this.MainMenu = new TabView
             {
@@ -104,7 +115,6 @@ namespace AfterburnerDataHandler
             };
 
             this.Controls.Add(MainMenu);
-            this.Controls.Add(this.StatusBar);
             this.MainMenu.Controls.Add(LoggerTab);
             this.MainMenu.Controls.Add(SerialTab);
             this.MainMenu.Controls.Add(SettingsTab);
@@ -148,6 +158,15 @@ namespace AfterburnerDataHandler
                 }
             }
 
+            if (string.IsNullOrWhiteSpace(Properties.Settings.Default.Logger_LogPath) == true)
+            {
+                string documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                string loggerOutput = Path.Combine(Path.Combine(documents, "Afterburner Data Handler"), "Logger Output");
+
+                Properties.Settings.Default.Logger_LogPath = loggerOutput;
+                Properties.Settings.Default.Save();
+            }
+
             if (Properties.Settings.Default.Logger_Autorun)
                 ProjectsManager.LoggerServer.Begin();
 
@@ -177,10 +196,44 @@ namespace AfterburnerDataHandler
             return true;
         }
 
+        public static bool ShowNotification(string message)
+        {
+            return ShowNotification(message, System.Reflection.Assembly.GetExecutingAssembly().GetName().Name);
+        }
+
+        public static bool ShowNotification(string message, string title)
+        {
+            if (Current == null || Current.TrayNotifyIcon == null)
+                return false;
+
+            Current.TrayNotifyIcon.Visible = false;
+            Current.TrayNotifyIcon.Visible = true;
+
+            Current.TrayNotifyIcon.ShowBalloonTip(
+                3,
+                title,
+                message,
+                ToolTipIcon.None);
+
+            return true;
+        }
+
         protected override void OnResizeBegin(EventArgs e)
         {
             base.OnResizeBegin(e);
             this.SuspendLayout();
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                ShowNotification("Window minimized to tray.");
+                this.ResumeLayout();
+                this.Hide();
+            }
         }
 
         protected override void OnResizeEnd(EventArgs e)
@@ -201,9 +254,24 @@ namespace AfterburnerDataHandler
                 {
                     e.Cancel = true;
                 }
+                else
+                {
+                    ProjectsManager.LoggerServer.Stop();
+                    ProjectsManager.SerialPortServer.Stop();
+                }
             }
 
             base.OnClosing(e);
+        }
+
+        private void TrayNotifyIconClick(object sender, EventArgs e)
+        {
+            if (this.IsHandleCreated == true)
+            {
+                this.Show();
+                this.WindowState = FormWindowState.Normal;
+                this.Activate();
+            }
         }
     }
 }
