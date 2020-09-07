@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using AfterburnerDataHandler.SharedMemory.Afterburner;
 using AfterburnerDataHandler.Servers.RTSS;
 using AfterburnerDataHandler.Projects;
@@ -193,7 +194,7 @@ namespace AfterburnerDataHandler.Servers.Logger
 
             if (LogServer.Open(LogDirectory, targetLogName, Settings.LogFileFormat))
             {
-                LogServer.Append(Settings.StartText);
+                LogServer.Append(Regex.Unescape(Settings.StartText));
                 currentFrame = 0;
                 currentFrametime = 0;
                 LogState = ServerState.Begin;
@@ -207,7 +208,7 @@ namespace AfterburnerDataHandler.Servers.Logger
             if (LogState != ServerState.Stop)
             {
                 LogState = ServerState.Stop;
-                LogServer.Append(Settings.FinalText);
+                LogServer.Append(Regex.Unescape(Settings.FinalText));
                 LogServer.Close();
             }
         }
