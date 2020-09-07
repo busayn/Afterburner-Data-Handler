@@ -157,7 +157,7 @@ namespace AfterburnerDataHandler.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool Logger_LoggingNotifications {
             get {
                 return ((bool)(this["Logger_LoggingNotifications"]));
@@ -193,7 +193,7 @@ namespace AfterburnerDataHandler.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("NamelessLog")]
         public string Logger_LogName {
             get {
                 return ((string)(this["Logger_LogName"]));
