@@ -61,6 +61,16 @@ namespace AfterburnerDataHandler.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon ADHIcon {
+            get {
+                object obj = ResourceManager.GetObject("ADHIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap ArrowDown {
@@ -107,16 +117,6 @@ namespace AfterburnerDataHandler.Properties {
             get {
                 object obj = ResourceManager.GetObject("LoggerIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon MADSIcon {
-            get {
-                object obj = ResourceManager.GetObject("MADSIcon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         

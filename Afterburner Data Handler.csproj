@@ -60,7 +60,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\Graphics\MADSIcon.ico</ApplicationIcon>
+    <ApplicationIcon>ADHIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>5240910F18D1B70B70C49B13120A7BC8CB88F7E5</ManifestCertificateThumbprint>
@@ -77,15 +77,16 @@
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -342,7 +343,7 @@
     <None Include="README.md" />
     <None Include="Resources\Graphics\Bug.png" />
     <None Include="Resources\Graphics\LoggerIcon.png" />
-    <Content Include="Resources\Graphics\MADSIcon.ico" />
+    <Content Include="ADHIcon.ico" />
     <Content Include="Resources\Graphics\ArrowDown.png" />
     <Content Include="Resources\Graphics\ArrowUp.png" />
     <Content Include="Resources\Graphics\Copy.png" />

@@ -55,7 +55,7 @@ namespace AfterburnerDataHandler
 
             this.TrayNotifyIcon = new NotifyIcon
             {
-                Icon = Properties.Resources.MADSIcon,
+                Icon = Properties.Resources.ADHIcon,
                 Visible = true,
                 Text = this.Text,
             };
