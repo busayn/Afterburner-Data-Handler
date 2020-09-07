@@ -256,19 +256,19 @@ namespace AfterburnerDataHandler.Servers.Logger
 
                 FrametimeData.Properties.Add(new MAHM_SHARED_MEMORY_ENTRY
                 {
-                    szSrcName = "Current frame",
+                    szSrcName = "RTSS Current frame",
                     data = currentFrame
                 });
 
                 FrametimeData.Properties.Add(new MAHM_SHARED_MEMORY_ENTRY
                 {
-                    szSrcName = "Frame time",
+                    szSrcName = "RTSS Frame time",
                     data = currentFrametime
                 });
 
                 FrametimeData.Properties.Add(new MAHM_SHARED_MEMORY_ENTRY
                 {
-                    szSrcName = "Frame duration",
+                    szSrcName = "RTSS Frame duration",
                     data = e.frametime
                 });
 

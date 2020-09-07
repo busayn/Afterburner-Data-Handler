@@ -590,9 +590,9 @@ namespace AfterburnerDataHandler.Controls
 
                 if (Server.Settings.UseFrametimeMode == true)
                 {
-                    properties.Insert(0, "Frame duration");
-                    properties.Insert(0, "Frame time");
-                    properties.Insert(0, "Current frame");
+                    properties.Insert(0, "RTSS Frame duration");
+                    properties.Insert(0, "RTSS Frame time");
+                    properties.Insert(0, "RTSS Current frame");
                 }
 
                 return properties;
