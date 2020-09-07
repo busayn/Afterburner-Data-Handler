@@ -136,7 +136,7 @@ namespace AfterburnerDataHandler.Controls
                         Margin = new Padding(0),
                         ScrollBars = RichTextBoxScrollBars.Both,
                         ReadOnly = true,
-                        WordWrap = false,
+                        WordWrap = true,
                         HideSelection = false,
                         Font = new Font("Consolas", 10),
                     };
