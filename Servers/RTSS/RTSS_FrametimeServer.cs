@@ -109,7 +109,7 @@ namespace AfterburnerDataHandler.Servers.RTSS
                 }
             }
 
-            return "";
+            throw new EndOfStreamException();
         }
 
         protected NamedPipeServerStream CreateNewServer()
