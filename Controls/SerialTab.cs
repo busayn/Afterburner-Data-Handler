@@ -424,6 +424,14 @@ namespace AfterburnerDataHandler.Controls
             };
             MainContainer.Controls.Add(ControlPanel);
 
+            this.TargetPortField = new DropdownInputField
+            {
+                Font = MainForm.MainFont,
+                LabelText = "Target Port",
+                Text = Properties.Settings.Default.SerialPort_LastPort
+            };
+            ControlPanel.Controls.Add(TargetPortField);
+
             this.StartServerButton = new FlatButton
             {
                 Text = "Start Server",
@@ -433,14 +441,6 @@ namespace AfterburnerDataHandler.Controls
                 Font = MainForm.MainFont
             };
             ControlPanel.Controls.Add(StartServerButton);
-
-            this.TargetPortField = new DropdownInputField
-            {
-                Font = MainForm.MainFont,
-                LabelText = "Target Port",
-                Text = Properties.Settings.Default.SerialPort_LastPort
-            };
-            ControlPanel.Controls.Add(TargetPortField);
 
             this.ParametersPanel = new VerticalListContainer
             {
@@ -466,7 +466,8 @@ namespace AfterburnerDataHandler.Controls
                 LabelAlignment = ContentAlignment.MiddleLeft,
                 Padding = new Padding(3),
                 Margin = new Padding(0),
-                Font = MainForm.HeaderFont
+                Font = MainForm.HeaderFont,
+                LabelWidth = 75,
             };
             ParametersPanel.Controls.Add(ParametersHeader);
 

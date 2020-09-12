@@ -41,7 +41,7 @@ namespace AfterburnerDataHandler
             InitializeComponent();
             InitializeGUI();
 
-            AppendMessage("2.0","Version", false);
+            AppendMessage("2.0.1","Version", false);
             AppendMessage("Edward Shein (MenY)", "Author", false);
             AppendMessage("https://github.com/busayn/Afterburner-Data-Handler", "More Info", false);
 
@@ -65,8 +65,6 @@ namespace AfterburnerDataHandler
             {
                 Dock = DockStyle.Bottom
             };
-            this.Controls.Add(this.StatusBar);
-
 
             this.MainMenu = new TabView
             {
@@ -119,13 +117,18 @@ namespace AfterburnerDataHandler
                 Icon = Properties.Resources.SettingsIcon,
             };
 
+            this.SuspendLayout();
             this.Controls.Add(MainMenu);
+
             this.MainMenu.Controls.Add(LoggerTab);
             this.MainMenu.Controls.Add(SerialTab);
             this.MainMenu.Controls.Add(SettingsTab);
             //this.MainMenu.Controls.Add(MainTab);
             //this.MainMenu.Controls.Add(StatisticTab);
             //this.MainMenu.Controls.Add(RemoteTab);
+
+            this.Controls.Add(this.StatusBar);
+            this.ResumeLayout(true);
         }
 
         protected virtual void InitializeServers()

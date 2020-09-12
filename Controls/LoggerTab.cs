@@ -41,7 +41,7 @@ namespace AfterburnerDataHandler.Controls
         public FlatButton EditDataButton { get; protected set; }
         public PropertyContainer EditDataProperty { get; protected set; }
 
-        // Log Name Property
+        // Log File Format
         public InputField LogFileFormatField { get; protected set; }
         public PropertyContainer LogFileFormatProperty { get; protected set; }
 
@@ -409,6 +409,12 @@ namespace AfterburnerDataHandler.Controls
             };
             MainContainer.Controls.Add(ControlPanel);
 
+            this.LogNameField = new InputField
+            {
+                Font = MainForm.MainFont,
+            };
+            ControlPanel.Controls.Add(LogNameField);
+
             this.StartServerButton = new FlatButton
             {
                 Text = "Start Server",
@@ -454,7 +460,8 @@ namespace AfterburnerDataHandler.Controls
                 LabelAlignment = ContentAlignment.MiddleLeft,
                 Padding = new Padding(3),
                 Margin = new Padding(0),
-                Font = MainForm.HeaderFont
+                Font = MainForm.HeaderFont,
+                LabelWidth = 75,
             };
             ParametersPanel.Controls.Add(ParametersHeader);
 
@@ -502,20 +509,6 @@ namespace AfterburnerDataHandler.Controls
                 MaxColumnSize = 0,
             };
             ParametersPanel.Controls.Add(ParametersContainer);
-
-            // Log Name Property
-            this.LogNameProperty = new PropertyContainer
-            {
-                Text = "Log Name",
-                Margin = new Padding(8, 1, 8, 1)
-            };
-            ParametersContainer.Controls.Add(LogNameProperty);
-
-            this.LogNameField = new InputField
-            {
-
-            };
-            LogNameProperty.Controls.Add(LogNameField);
 
             // Edit Data Property
             this.EditDataProperty = new PropertyContainer
