@@ -282,44 +282,48 @@ namespace AfterburnerDataHandler.FlatControls
         protected virtual IntPtr MouseHook(int code, IntPtr wParam, IntPtr lParam)
         {
             NativeMethods.MouseMessageType messageType = (NativeMethods.MouseMessageType)wParam;
-            NativeMethods.MSLLHOOKSTRUCT messageData = Marshal.PtrToStructure<NativeMethods.MSLLHOOKSTRUCT>(lParam);
 
             if (code >= 0 && this.IsHandleCreated)
             {
-                switch (messageType)
+                SeparateThreadInvoke((MethodInvoker)delegate
                 {
-                    case NativeMethods.MouseMessageType.WM_LBUTTONDOWN:
-                    case NativeMethods.MouseMessageType.WM_RBUTTONDOWN:
-                        if (!this.Bounds.Contains(messageData.pt))
-                        {
-                            this.Close();
-                        }
-                        break;
-                    case NativeMethods.MouseMessageType.WM_MOUSEMOVE:
-                        if (this.Bounds.Contains(messageData.pt))
-                        {
-                            Control controlToSelect = this.View.GetChildAtPoint(this.View.PointToClient(messageData.pt));
-                            if (controlToSelect != this.ActiveControl) controlToSelect?.Select();
-                        }
-                        break;
-                    case NativeMethods.MouseMessageType.WM_MOUSEWHEEL:
-                        if (useScrollHook == true && this.Bounds.Contains(messageData.pt) && this.IsHandleCreated == true)
-                        {
-                            IntPtr positionPtr = (IntPtr)((messageData.pt.Y << 16) | (messageData.pt.X & 0xffff));
+                    NativeMethods.MSLLHOOKSTRUCT messageData = Marshal.PtrToStructure<NativeMethods.MSLLHOOKSTRUCT>(lParam);
 
-                            Message msg = Message.Create(
-                                this.Handle,
-                                (int)NativeMethods.MouseMessageType.WM_MOUSEWHEEL,
-                                (IntPtr)messageData.mouseData,
-                                positionPtr);
+                    switch (messageType)
+                    {
+                        case NativeMethods.MouseMessageType.WM_LBUTTONDOWN:
+                        case NativeMethods.MouseMessageType.WM_RBUTTONDOWN:
+                            if (!this.Bounds.Contains(messageData.pt))
+                            {
+                                this.Close();
+                            }
+                            break;
+                        case NativeMethods.MouseMessageType.WM_MOUSEMOVE:
+                            if (this.Bounds.Contains(messageData.pt))
+                            {
+                                Control controlToSelect = this.View.GetChildAtPoint(this.View.PointToClient(messageData.pt));
+                                if (controlToSelect != this.ActiveControl) controlToSelect?.Select();
+                            }
+                            break;
+                        case NativeMethods.MouseMessageType.WM_MOUSEWHEEL:
+                            if (useScrollHook == true && this.Bounds.Contains(messageData.pt) && this.IsHandleCreated == true)
+                            {
+                                IntPtr positionPtr = (IntPtr)((messageData.pt.Y << 16) | (messageData.pt.X & 0xffff));
 
-                            this.WndProc(ref msg);
-                        }
-                        break;
-                }
+                                Message msg = Message.Create(
+                                    this.Handle,
+                                    (int)NativeMethods.MouseMessageType.WM_MOUSEWHEEL,
+                                    (IntPtr)messageData.mouseData,
+                                    positionPtr);
+
+                                this.WndProc(ref msg);
+                            }
+                            break;
+                    }
+                });
             }
 
-            return NativeMethods.CallNextHookEx(mouseHook, code, wParam, lParam);
+            return NativeMethods.CallNextHookEx(IntPtr.Zero, code, wParam, lParam);
         }
 
         protected virtual IntPtr KeyboardHook(int code, IntPtr wParam, IntPtr lParam)
@@ -338,10 +342,16 @@ namespace AfterburnerDataHandler.FlatControls
                     switch ((Keys)messageData.vkCode)
                     {
                         case Keys.Up:
-                            FocusNextItem(false);
+                            SeparateThreadInvoke((MethodInvoker)delegate
+                            {
+                                FocusNextItem(false);
+                            });
                             return cancelMassege;
                         case Keys.Down:
-                            FocusNextItem(true);
+                            SeparateThreadInvoke((MethodInvoker)delegate
+                            {
+                                FocusNextItem(true);
+                            });
                             return cancelMassege;
                     }
                 }
@@ -350,15 +360,21 @@ namespace AfterburnerDataHandler.FlatControls
                 {
                     case Keys.Return:
                     case Keys.Space:
-                        SelectItem(this.ActiveControl);
+                        SeparateThreadInvoke((MethodInvoker)delegate
+                        {
+                            SelectItem(this.ActiveControl);
+                        });
                         return cancelMassege;
                     case Keys.Escape:
-                        this.Close();
+                        SeparateThreadInvoke((MethodInvoker)delegate
+                        {
+                            this.Close();
+                        });
                         break;
                 }
             }
 
-            return NativeMethods.CallNextHookEx(keyboardHook, code, wParam, lParam);
+            return NativeMethods.CallNextHookEx(IntPtr.Zero, code, wParam, lParam);
         }
 
         protected override void OnPaintBackground(PaintEventArgs pevent)
@@ -420,6 +436,14 @@ namespace AfterburnerDataHandler.FlatControls
             {
                 this.Close();
             }
+        }
+
+        private void SeparateThreadInvoke(Delegate action)
+        {
+            ThreadPool.QueueUserWorkItem((object state) =>
+            {
+                this.Invoke(action);
+            });
         }
 
         public class DropdownCollection : IList
