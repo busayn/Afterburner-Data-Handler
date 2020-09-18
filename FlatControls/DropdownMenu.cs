@@ -282,13 +282,12 @@ namespace AfterburnerDataHandler.FlatControls
         protected virtual IntPtr MouseHook(int code, IntPtr wParam, IntPtr lParam)
         {
             NativeMethods.MouseMessageType messageType = (NativeMethods.MouseMessageType)wParam;
+            NativeMethods.MSLLHOOKSTRUCT messageData = Marshal.PtrToStructure<NativeMethods.MSLLHOOKSTRUCT>(lParam);
 
             if (code >= 0 && this.IsHandleCreated)
             {
                 SeparateThreadInvoke((MethodInvoker)delegate
                 {
-                    NativeMethods.MSLLHOOKSTRUCT messageData = Marshal.PtrToStructure<NativeMethods.MSLLHOOKSTRUCT>(lParam);
-
                     switch (messageType)
                     {
                         case NativeMethods.MouseMessageType.WM_LBUTTONDOWN:
@@ -440,10 +439,14 @@ namespace AfterburnerDataHandler.FlatControls
 
         private void SeparateThreadInvoke(Delegate action)
         {
-            ThreadPool.QueueUserWorkItem((object state) =>
+            try
             {
-                this.Invoke(action);
-            });
+                ThreadPool.QueueUserWorkItem((object state) =>
+                {
+                    this.BeginInvoke(action);
+                });
+            }
+            catch (Exception) { }
         }
 
         public class DropdownCollection : IList
