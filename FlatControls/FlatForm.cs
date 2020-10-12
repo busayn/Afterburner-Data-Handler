@@ -16,36 +16,126 @@ namespace AfterburnerDataHandler.FlatControls
     public class FlatForm : Form
     {
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public virtual bool UseGlobalTheme { get; set; } = true;
+
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public Theme Theme
+        {
+            get
+            {
+                if (theme == null) theme = this.DefaultTheme;
+                return theme;
+            }
+            set
+            {
+                theme = value;
+                this.UpdateTheme();
+            }
+        }
+
+        public event EventHandler<EventArgs> ThemeDataChanged;
+
+        [Category("Appearance")]
+        [Browsable(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public Theme.BackgroundSource BackgroundSource
+        {
+            get { return backgroundSource; }
+            set
+            {
+                backgroundSource = value;
+                this.OnBackColorChanged(EventArgs.Empty);
+                this.Invalidate();
+            }
+        }
+
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public virtual Color TextColor
+        {
+            get { return textColor; }
+            set
+            {
+                textColor = value;
+            }
+        }
+
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public virtual Color DisabledTextColor
+        {
+            get { return disabledTextColor; }
+            set
+            {
+                disabledTextColor = value;
+            }
+        }
+
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public virtual Color BackgroundColor
+        {
+            get { return backgroundColor; }
+            protected set
+            {
+                backgroundColor = value;
+                OnThemeDataChanged(EventArgs.Empty);
+            }
+        }
+
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Color BackColor
         {
-            get { return base.BackColor; }
-            set { base.BackColor = Theme.Current.WindowBackgroundColor; }
+            get
+            {
+                switch (backgroundSource)
+                {
+                    case Theme.BackgroundSource.Inherit:
+                        return base.BackColor;
+                    case Theme.BackgroundSource.Theme:
+                        return this.BackgroundColor;
+                    default:
+                        return base.BackColor;
+                }
+            }
+            set
+            {
+                base.BackColor = value;
+            }
         }
+
+        protected Theme DefaultTheme { get { return UseGlobalTheme ? Theme.Current : new Theme(); } }
+
+        private Theme theme = new Theme();
+        private Color textColor = Color.FromArgb(255, 255, 255);
+        private Color disabledTextColor = Color.FromArgb(255, 255, 255);
+        private Color backgroundColor = Color.FromArgb(0, 0, 0);
+        private Theme.BackgroundSource backgroundSource = Theme.BackgroundSource.Theme;
 
         public FlatForm()
         {
+            this.Theme = DefaultTheme;
             Theme.GlobalThemeChanged += GlobalThemeChanged;
-            UpdateTheme();
         }
 
         protected override void OnPaintBackground(PaintEventArgs pevent)
         {
-            using (SolidBrush brush = new SolidBrush(this.BackColor))
-            {
-                pevent.Graphics.FillRectangle(brush, pevent.ClipRectangle);
-            }
+            DrawingUtils.FillRectangle(pevent.Graphics, this.BackColor, pevent.ClipRectangle);
         }
 
         protected virtual void UpdateTheme()
         {
-            Theme theme = Theme.Current;
-            this.BackColor = theme.WindowBackgroundColor;
+            this.BackgroundColor = this.Theme.WindowBackgroundColor;
+            this.TextColor = this.Theme.TextColor;
+            this.DisabledTextColor = this.Theme.DisabledTextColor;
             this.Invalidate();
         }
 
-        private void GlobalThemeChanged(object sender, EventArgs e)
+        public virtual void OnThemeDataChanged(EventArgs e)
         {
-            UpdateTheme();
+            this.Invalidate();
+            ThemeDataChanged?.Invoke(this, e);
+        }
+
+        protected void GlobalThemeChanged(object sender, EventArgs e)
+        {
+            this.Theme = Theme.Current;
         }
     }
 }
