@@ -26,10 +26,10 @@ namespace AfterburnerDataHandler.FlatControls
         [Browsable(true), Category("Appearance")]
         public int MinColumnSize
         {
-            get { return (this.LayoutEngine as FlexColumnsLayoutEngine).MinMinColumnSizeSize; }
+            get { return (this.LayoutEngine as FlexColumnsLayoutEngine).MinColumnSize; }
             set
             {
-                (this.LayoutEngine as FlexColumnsLayoutEngine).MinMinColumnSizeSize = value > 0 ? value : 0;
+                (this.LayoutEngine as FlexColumnsLayoutEngine).MinColumnSize = value > 0 ? value : 0;
                 this.PerformLayout();
             }
         }

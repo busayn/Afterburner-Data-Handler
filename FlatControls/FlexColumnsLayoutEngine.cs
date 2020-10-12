@@ -11,11 +11,10 @@ namespace AfterburnerDataHandler.FlatControls
 {
     public class FlexColumnsLayoutEngine : LayoutEngine
     {
-        public virtual int MinMinColumnSizeSize { get; set; } = 100;
+        public virtual int MinColumnSize { get; set; } = 100;
         public virtual int MaxColumnSize { get; set; } = 200;
         public virtual int MinColumnCount { get; set; } = 1;
         public virtual int MaxColumnCount { get; set; } = 3;
-
 
         public enum ColumnsLayout
         {
@@ -52,41 +51,30 @@ namespace AfterburnerDataHandler.FlatControls
 
         public virtual Rectangle[] CalculateLayout(Control container, Rectangle targetBounds)
         {
-            if ((container is Control) == false)
-                return new Rectangle[0];
-            
-            Control panel = container as Control;
-
-            if (panel.Controls == null || panel.Controls.Count < 1)
+            if ((container is Control) == false || container.Controls.Count < 1)
                 return new Rectangle[0];
 
             int columnCount = 1;
-            if (MinMinColumnSizeSize > 0) columnCount = targetBounds.Width / MinMinColumnSizeSize;
+            if (MinColumnSize > 0) columnCount = targetBounds.Width / MinColumnSize;
             if (columnCount < MinColumnCount) columnCount = MinColumnCount;
             if (columnCount > MaxColumnCount && MaxColumnCount > 0) columnCount = MaxColumnCount;
-            if (columnCount > panel.Controls.Count) columnCount = panel.Controls.Count;
+            if (columnCount > container.Controls.Count) columnCount = container.Controls.Count;
 
             int columnSize = targetBounds.Width;
-
-            if (columnCount > 1)
-                columnSize = (int)Math.Floor(targetBounds.Width / (float)columnCount);
-
-            if (columnSize < MinMinColumnSizeSize)
-                columnSize = MinMinColumnSizeSize;
-
-            if (columnSize > MaxColumnSize && MaxColumnSize > 0)
-                columnSize = MaxColumnSize;
+            if (columnCount > 1) columnSize = (int)Math.Floor(targetBounds.Width / (float)columnCount);
+            if (columnSize < MinColumnSize) columnSize = MinColumnSize;
+            if (columnSize > MaxColumnSize && MaxColumnSize > 0) columnSize = MaxColumnSize;
 
             switch (ColumnsStyle)
             {
                 case ColumnsLayout.HorizontalGrid:
-                    return CalculateHorizontalGrid(panel.Controls, targetBounds, columnSize, columnCount);
+                    return CalculateHorizontalGrid(container.Controls, targetBounds, columnSize, columnCount);
                 case ColumnsLayout.VerticalGrid:
-                    return CalculateVerticalGrid(panel.Controls, targetBounds, columnSize, columnCount);
+                    return CalculateVerticalGrid(container.Controls, targetBounds, columnSize, columnCount);
                 case ColumnsLayout.HorizontalStaggeredGrid:
-                    return CalculateHorizontalStaggeredGrid(panel.Controls, targetBounds, columnSize, columnCount);
+                    return CalculateHorizontalStaggeredGrid(container.Controls, targetBounds, columnSize, columnCount);
                 case ColumnsLayout.VerticalStaggeredGrid:
-                    return CalculateVerticalStaggeredGrid(panel.Controls, targetBounds, columnSize, columnCount);
+                    return CalculateVerticalStaggeredGrid(container.Controls, targetBounds, columnSize, columnCount);
             }
 
             return new Rectangle[0];
@@ -113,7 +101,7 @@ namespace AfterburnerDataHandler.FlatControls
                     currentLineHeight = 0;
                 }
 
-                controlsBounds[i] = CalculateIconBounds(
+                controlsBounds[i] = CalculateControlBounds(
                     controls[i],
                     bounds.Left + currentColumn * columnSize + controlMargin.Left,
                     nextLineLocation + controlMargin.Top,
@@ -161,7 +149,7 @@ namespace AfterburnerDataHandler.FlatControls
 
                 Padding controlMargin = controls[currentControl].Margin;
 
-                controlsBounds[currentControl] = CalculateIconBounds(
+                controlsBounds[currentControl] = CalculateControlBounds(
                     controls[currentControl],
                     bounds.Left + currentColumn * columnSize + controlMargin.Left,
                     nextLineLocation + controlMargin.Top,
@@ -198,7 +186,7 @@ namespace AfterburnerDataHandler.FlatControls
                     if (columnsHeight[n] < columnsHeight[currentColumn]) currentColumn = n;
                 }
 
-                controlsBounds[i] = CalculateIconBounds(
+                controlsBounds[i] = CalculateControlBounds(
                     controls[i],
                     bounds.Left + currentColumn * columnSize + controlMargin.Left,
                     columnsHeight[currentColumn] + controlMargin.Top,
@@ -233,7 +221,7 @@ namespace AfterburnerDataHandler.FlatControls
                 Rectangle controlBounds = controls[i].Bounds;
                 Padding controlMargin = controls[i].Margin;
 
-                controlsBounds[i] = CalculateIconBounds(
+                controlsBounds[i] = CalculateControlBounds(
                     controls[i],
                     bounds.Left + currentColumn * columnSize + controlMargin.Left,
                     nextLineLocation + controlMargin.Top,
@@ -251,7 +239,7 @@ namespace AfterburnerDataHandler.FlatControls
             return controlsBounds;
         }
 
-        protected virtual Rectangle CalculateIconBounds(
+        protected virtual Rectangle CalculateControlBounds(
             Control control, int locationX, int locationY, int columnSize)
         {
             return new Rectangle(
