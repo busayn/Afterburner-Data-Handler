@@ -31,7 +31,7 @@ namespace AfterburnerDataHandler.SharedMemory.Afterburner
             try
             {
                 serverState = true;
-                masmMappedFile = MemoryMappedFile.OpenExisting(mapName, MemoryMappedFileRights.ReadWrite);
+                masmMappedFile = MemoryMappedFile.OpenExisting(mapName, MemoryMappedFileRights.FullControl);
                 masmStream = masmMappedFile.CreateViewStream();
             }
             catch { serverState = false; }
@@ -77,6 +77,16 @@ namespace AfterburnerDataHandler.SharedMemory.Afterburner
                             masmStream.Position = 0;
                             masmStream.Read(headerBuffer, 0, headerBufferSize);
                             var headerPointer = (MAHM_SHARED_MEMORY_HEADER_UNSAFE*)bufferPointer;
+
+                            //// Reconnect if file is DEAD
+                            if (headerPointer->dwSignature == 0xDEAD)
+                            {
+                                Start();
+
+                                masmStream.Position = 0;
+                                masmStream.Read(headerBuffer, 0, headerBufferSize);
+                                headerPointer = (MAHM_SHARED_MEMORY_HEADER_UNSAFE*)bufferPointer;
+                            }
 
                             // READ MAHM_SHARED_MEMORY_HEADER
                             if (headerPointer->dwSignature == 0x4D41484D)
