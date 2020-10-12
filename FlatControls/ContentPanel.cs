@@ -110,7 +110,6 @@ namespace AfterburnerDataHandler.FlatControls
         public ContentPanel()
         {
             SetStyle(ControlStyles.ResizeRedraw, true);
-            Theme.GlobalThemeChanged += GlobalThemeChanged;
 
             this.Theme = DefaultTheme;
             Theme.GlobalThemeChanged += GlobalThemeChanged;
@@ -123,9 +122,9 @@ namespace AfterburnerDataHandler.FlatControls
 
         protected virtual void UpdateTheme()
         {
-            this.BackgroundColor = Theme.PanelBackgroundColor;
-            this.TextColor = Theme.TextColor;
-            this.DisabledTextColor = Theme.DisabledTextColor;
+            this.BackgroundColor = this.Theme.PanelBackgroundColor;
+            this.TextColor = this.Theme.TextColor;
+            this.DisabledTextColor = this.Theme.DisabledTextColor;
             this.Invalidate();
         }
 
